@@ -9,7 +9,7 @@ import java.util.Locale;
  * @Date 2023/11/14 21:20
  * @Usage:
  */
-public class DateFormatBadDemo {
+public class DateFormatBadDemo01 {
     public static void main(String[] args) {
         final String strDateTime = "Wed, 09 Feb 2011 12:34:27";
         DateTimeFormatter dtfWithDefaultLocale = null;
