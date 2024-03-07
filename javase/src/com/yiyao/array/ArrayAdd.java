@@ -1,5 +1,7 @@
 package com.yiyao.array;
 
+import java.util.Scanner;
+
 /**
  * @Author Yi
  * @Date 2024/1/23 23:15
@@ -10,5 +12,29 @@ package com.yiyao.array;
  * 3)用户可以通过如下方法来决定是否继续添加  添加成功,是否继续? y/n
  */
 public class ArrayAdd {
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 4, 5};
+        char ans;
+        Scanner sc = new Scanner(System.in);
+        do {
+            int[] newArr = new int[arr.length + 1];
+            System.out.print("please input the number you want to add: ");
+            int inputNumber = sc.nextInt();
 
+            newArr[arr.length] = inputNumber;
+            for (int i = 0; i < arr.length; i++) {
+                newArr[i] = arr[i];
+            }
+            System.out.println();
+            arr = newArr;
+            for (int i = 0; i < arr.length; i++) {
+                System.out.print(arr[i] + "\t");
+            }
+            System.out.println();
+            System.out.print("keep adding...? (y/n) ");
+            String str = sc.next();
+            ans = str.charAt(0);
+
+        } while (ans == 'y');
+    }
 }
