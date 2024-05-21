@@ -3,7 +3,10 @@ package com.platowantnothing.array;
 /**
  * @Author Yi
  * @Date 2024/5/20 22:52
- * @Usage:
+ * @Usage:  二维数组的使用细节和注意事项
+ *  0，回顾 一维数组声明方式: int[] x, int x[]
+ *  1. 二维数组的声明方式有 int[][] y || int[] y[] || int y[][]
+ *  2. 二维数组实际上是由多个一维数组组成的，它的各个一维数组的长度可以相同，也可以不相同。 << 列数不等的二维数组
  */
 public class TwoDimensionArrDemo01 {
     public static void main(String[] args) {
