@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/hspjava.iml" filepath="$PROJECT_DIR$/.idea/hspjava.iml" />
-      <module fileurl="file://$PROJECT_DIR$/javase/javase.iml" filepath="$PROJECT_DIR$/javase/javase.iml" />
+      <module fileurl="file://$PROJECT_DIR$/java-pwn/java-pwn.iml" filepath="$PROJECT_DIR$/java-pwn/java-pwn.iml" />
+      <module fileurl="file://$PROJECT_DIR$/javascript-pwn.iml" filepath="$PROJECT_DIR$/javascript-pwn.iml" />
+      <module fileurl="file://$PROJECT_DIR$/repo-prepare-syntax.iml" filepath="$PROJECT_DIR$/repo-prepare-syntax.iml" />
     </modules>
   </component>
 </project>
