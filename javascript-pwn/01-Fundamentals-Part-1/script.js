@@ -1,3 +1,11 @@
+// *hw : tip calculator*
+let bill = 275.3;
+let tip = Number(bill > 50 && bill < 350) ? bill * 0.2 : bill;
+console.log(
+  `the bill is ${bill}, and the tip is ${tip}, and the total value is ${
+    bill + tip
+  }`
+);
 // *11 Condition operator*
 const theGirlAge = 19;
 console.log(`drink some ${theGirlAge >= 18 ? "wine" : "water"}`);
