@@ -217,3 +217,271 @@ ${bills[0]+tips[0]}, ${bills[1]+tips[1]}, ${bills[2]+tips[2]}
 */
 
 //**8 Object */
+/*
+//Intro, no way to find key for those elements
+const jonasArray = [
+  "Jonas",
+  "Schemdstaman",
+  2023 - 1991,
+  "teacher",
+  ["micheal", "tom", "lily"],
+];
+
+// crate object1: object literal syntax
+// key-value name
+const jonas = {
+  //key : variale name || properties
+  firstName: "Jonas",
+  lastName: "Scamentaman",
+  age: 2027 - 1991,
+  job: "teacher",
+  friends: ["micheal", "tom", "lily"],
+};
+
+// create object2
+*/
+
+//**9 Retrive data from Object or Change data  */
+/*
+console.log(jonas);
+// unlike array, retrive elemets have no connection with index
+console.log(jonas.lastName);
+console.log(jonas["lastName"]);
+
+// [] operation -> expression
+const nameKey = "Name";
+console.log(jonas["first" + nameKey]);
+console.log(jonas["last" + nameKey]);
+
+const interestedIn = prompt(
+  "What do you want to know about Jonas? Choose between firstName, lastName, age, job and friends."
+);
+
+if (jonas[interestedIn]) {
+  console.log(jonas[interestedIn]);
+} else {
+  console.log(
+    "Wrong request!\n\
+    Choose between firstName, lastName, age, job and friends."
+  );
+}
+
+jonas.location = "Italy";
+jonas["twiter"] = "@jonasScranment";
+console.log(jonas);
+
+// Challenge
+const jonasBestFriend = jonas.friends[0];
+console.log(jonasBestFriend);
+*/
+
+//**10 Object method */
+/*
+const jonas = {
+  firstName: "Jonas",
+  lastName: "Scamentaman",
+  brithYear: 1998,
+  job: "teacher",
+  friends: ["micheal", "tom", "lily"],
+  hasDriversLicense: true,
+
+  //   calcAge: function (birthYear) {
+  //     return 2037 - birthYear;
+  //   }
+
+  // this
+  // calcAge: function () {
+  //   console.log(this);
+  //   return 2037 - this.brithYear;
+  // }
+
+  calcAge: function () {
+    this.age = 2037 - this.brithYear;
+    return this.age; // x -> undefined
+  },
+
+  getSummary: function () {
+    return `${this.firstName} is a ${this.age}-years old ${this.job},\
+    and he has ${this.hasDriversLicense ? "a" : "no"} driver's license`;
+  },
+};
+
+// console.log(jonas.calcAge(1998));
+// console.log(jonas['calcAge'](1998));
+console.log(jonas.calcAge());
+
+// Reduce the number of calculating
+console.log(jonas.age);
+console.log(jonas.age);
+console.log(jonas.age);
+
+//challenge
+//My version
+console.log(`${jonas.firstName} is a ${jonas.age}-years old ${jonas.job},\
+and he has ${jonas.hasDriversLicense ? "a" : "no"} driver's license`);
+// Jonas version
+console.log(jonas.getSummary());
+*/
+
+//**HW */
+/*
+const markMiller = {
+  fullName: "Mark Miller",
+  mass: 78,
+  height: 1.69,
+  calcBMI: function () {
+    this.bmi = this.mass / this.height ** 2;
+    return this.bmi;
+  },
+};
+const johnSmith = {
+  fullName: "John Smith",
+  mass: 92,
+  height: 1.95,
+  calcBMI: function () {
+    this.bmi = this.mass / this.height ** 2;
+    return this.bmi;
+  },
+};
+
+// *call method first. If not cal call this method 
+markMiller.calcBMI();
+johnSmith.calcBMI();
+
+console.log(`John's BMI(${johnSmith.bmi}) is ${
+  johnSmith.bmi > markMiller.bmi ? "higher" : "lower"
+} \
+than mark's (${markMiller.bmi}) `);
+*/
+
+//**11 Loop */
+/*
+// console.log("Lifting weights repetition 1");
+// console.log("Lifting weights repetition 2");
+// console.log("Lifting weights repetition 3");
+// console.log("Lifting weights repetition 4");
+// console.log("Lifting weights repetition 5");
+// console.log("Lifting weights repetition 6");
+// console.log("Lifting weights repetition 7");
+// console.log("Lifting weights repetition 8");
+
+// for
+// for(let rep=1;rep<11;rep++){
+// console.log(`Lifting weights repetition ${rep}`);
+// }
+
+const jonasArray = [
+  "Jonas",
+  "Schemdstaman",
+  2023 - 1991,
+  "teacher",
+  ["micheal", "tom", "lily"],
+];
+
+const types = [];
+
+for (let i = 0; i < jonasArray.length; i++) {
+  console.log(jonasArray[i], typeof jonasArray[i]);
+
+  // Filling types array
+  //   types[i]=typeof jonasArray[i];
+  types.push(typeof jonasArray[i]);
+}
+console.log(types);
+
+const years = [1997, 2001, 2004, 2023];
+const ages = [];
+for (let i = 0; i < years.length; i++) {
+  ages[i] = 2037 - years[i];
+  //ages.push(2037 - years[i])
+}
+console.log(ages);
+
+// continue and break
+console.log("=====ONLY STRING=====");
+for (let i = 0; i < jonasArray.length; i++) {
+  if (typeof jonasArray[i] !== "string") continue;
+  console.log(jonasArray[i], typeof jonasArray[i]);
+}
+
+console.log("=====BREAK WITH NUMBER=====");
+for (let i = 0; i < jonasArray.length; i++) {
+  if (typeof jonasArray[i] === "number") break;
+  console.log(jonasArray[i], typeof jonasArray[i]);
+}
+*/
+
+//**12 Looping backward and loops in loop */
+/*
+const jonas = [
+  "Jonas",
+  "Schemdstaman",
+  2023 - 1991,
+  "teacher",
+  ["micheal", "tom", "lily"],
+];
+
+for (let i = jonas.length - 1; i >= 0; i--) {
+  console.log(jonas[i]);
+}
+
+for (let i = 1; i < 4; i++) {
+  console.log(`----start with ${i} routation`);
+
+  for(let rep=1;rep<6; rep++){
+    console.log(`starting the repitation ${rep}`);
+  }
+}
+*/
+
+//**13 the while loop */
+/*
+for (let rep = 1; rep < 11; rep++) {
+//   console.log(`Lifting weights repetition ${rep}`);
+}
+
+let rep = 1;
+while (rep <= 10) {
+//   console.log(`WHILE: Lifting weights repetition ${rep}`);
+  rep++;
+}
+//* compared with the For loop, while need condition, instead of counter
+
+let dice = Math.trunc(Math.random() * 6) + 1;
+
+while (dice !== 6) {
+  console.log(`You rolled a ${dice}`);
+  dice = Math.trunc(Math.random() * 6) + 1;
+  if(dice===6){
+    console.log('The loop is about to end...')
+  }
+}
+*/
+
+//**HW */
+/*
+const bills = [22, 295, 176, 440, 37, 105, 10, 1100, 86, 52];
+
+const tips = [];
+const totals = [];
+
+function calcTip(bill) {
+  return bill >= 50 && bill <= 300 ? bill * 0.15 : bill * 0.2;
+}
+
+for (let i = 0; i < bills.length; i++) {
+  tips.push(calcTip(bills[i]));
+  totals.push(Number(tips[i] + bills[i]));
+}
+console.log(tips, totals);
+
+const calcAverage = function (arr) {
+  let sum = 0;
+  for (let i = 0; i < arr.length; i++) {
+    sum += arr[i];
+  }
+  return sum / arr.length;
+};
+console.log(calcAverage(tips), calcAverage(totals));
+*/
+
