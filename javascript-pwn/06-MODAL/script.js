@@ -30,7 +30,7 @@ overlay.addEventListener('click', closeModal);
 //1) global event
 // keyup: off the key, keypress: contiunous press key, kedown:press a key
 document.addEventListener('keydown', function (event) {
-  // When this function is called, ask js to use argument, that is an Object
+  //NOTE: When this function is called, ask js to use argument, that is an Object
   // console.log('A key was pressed');
 
   // How to know which key is pressed
