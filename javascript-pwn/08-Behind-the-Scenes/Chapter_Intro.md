@@ -1,12 +1,28 @@
 ## Feature of Javascript
 
+> point about concurrency: there is a function called **event loop**, let function run in the back and put the result back to the main thread.
+
 ## What is a Javascript engine?
 
 > Program that executes Javascript code. Example: V8 engine.
 
+> And JS Engine combines with **call stack**(execute code) and **heap**(stored in mermeory)
+
+#### Compilation vs. Interpretation
+
+> Just-in-time compilation: entire code is coverted into machine code at once, then executr immediatrly (NOT a portable file)
+> Flow: Parsing -> compilation -> execution
+
+#### JavaScript Runtime
+
+> How this(Event Loop) work?
+> When callback function executed, then it is put into callback queue. And when callstack is empty, the callback function will be put into callstack to execute.
+
 ## What is an execution context?
 
+> Global execution context: is created for top-level code
 > environment in whichh a piece of javascript is executed. Stores all the necesary information for some code to be executed. For exmaple, when order a pizza, the Pizza is "JavaScript code", and the Pizza box act as "execution context".
+> Flow: Compilation ----> Execution: global execution context, -> execution of top-level code(inside global EC) -> execution of functions and waiting for callbacks
 
 ---
 
@@ -41,3 +57,20 @@
 > - Scope of a vaibale: region of our code where a certain variable can be accessed.
 >   ![](./def-3TypeOfScope.png) > _Note: scope has acccess to variables from all outer scope (aka. **variable lookup in scope chain**)_  
 >    _Note: let and const are **block-scoped**_ > ![alt text](./sample_scopeChain.png) _Sample: Scope chanin flow_ > ![alt text](./sample_scopeChainVsCallStack.png) _Smaple: Scope Chian vs. Call Flow_ > ![alt text](./Scope_Summary.png) _pic: Summary_
+
+---
+
+## Hoisting in JavaScript
+
+> Hoisting: Makes some types of variables accessible/ usable in the code before they are actually declared. "Variables lifted to the top of their scope." _---->_ **Before execution,** code is scanned for variable declaration, and for each variable, a new property is created in the **variable environment object** > ![alt text](./def-hoisting.png)
+
+### Temporal Dead Zone, let and const
+
+Why it(TDZ) exist? to cathcn error and exception easier.
+to makes const variables actually work.
+
+Why hoisting? to use functions before actual declaration.
+
+## How the this keyword works
+
+![alt text](./def-thisKeyword.png)
