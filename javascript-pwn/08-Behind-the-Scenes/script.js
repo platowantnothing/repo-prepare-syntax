@@ -111,34 +111,111 @@ matilda.calcAge();
 const f = jonas.calcAge;
 f();
 */
-console.log('---------regular function and arrow function---------');
+//console.log('---------regular function and arrow function---------');
 //** Regular Function & Arrow Function */
 
 //NOTE: DO NOT use arrow function as object properties(or method) .
 //Best practice
 
-const jonas = {
-  firstName: 'Jonas',
-  year: 1991,
-  calcAge: function () {
-    console.log(this);
-    console.log(2037 - this.year);
+// const jonas = {
+//   firstName: 'Jonas',
+//   year: 1991,
+//   calcAge: function () {
+//     console.log(this);
+//     console.log(2037 - this.year);
 
-    const isMillenial = function () {
-      console.log(this);
-      console.log(this.year >= 1981 && this.year <= 1996);
-    };
-    isMillenial();
-  },
+//     const isMillenial = function () {
+//       console.log(this);
+//       console.log(this.year >= 1981 && this.year <= 1996);
+//     };
+//     isMillenial();
+//   },
 
-  // greet: function () {
-  //   console.log(this);
-  //   console.log(`Hey ${this.firstName}`);
-  // },
-  greet: () => {
-    console.log(this);
-    console.log(`Hey ${this.firstName}`);
-  },
+//   // greet: function () {
+//   //   console.log(this);
+//   //   console.log(`Hey ${this.firstName}`);
+//   // },
+//   greet: () => {
+//     console.log(this);
+//     console.log(`Hey ${this.firstName}`);
+//   },
+// };
+// jonas.greet();
+// jonas.calcAge();
+
+//** Arguments Keyword */
+//NOTE: Arguments only used in normal function. Cannot be used in arrow function .
+// const addExpr = function (a, b) {
+//   console.log(arguments);
+//   return a + b;
+// };
+
+// addExpr(2, 5);
+// addExpr(2, 5, 7, 9);
+
+// // var addArrow = (a, b) => {
+// //   console.log(arguments);
+// //   return a + b;
+// // };
+
+// // addArrow(1, 2);
+
+//** Primitive vs. Object  */
+let age = 30;
+let oldAge = age;
+age = 31;
+console.log(age);
+console.log(oldAge);
+
+const me = {
+  name: 'Jonas',
+  age: 30,
 };
-jonas.greet();
-jonas.calcAge();
+const friend = me;
+friend.age = 27;
+console.log('Friend:', friend);
+console.log('me:', me);
+
+//NOTE: Review for Premitives(Number, String, Boolean, Undefined, Null, Symbol,BigInt) < Premitive Types, which stored in Call Stack where EC run .
+//NOTE: Review for Objects(Object literal, Arrays, Functions, Many more...)  < Reference Types, which stored in HEAP .
+//NOTE: Cloud refer img
+
+// Primitive Type
+let lastName = 'Ding';
+let oldLastName = lastName;
+lastName = 'Yang';
+console.log(oldLastName, lastName);
+
+// Reference Type
+const jessica = {
+  firstName: 'Jessica',
+  lastName: 'Ding',
+  age: 27,
+};
+const marriedJessica = jessica;
+marriedJessica.lastName = 'Yang';
+console.log('before marriage:', jessica);
+console.log('after marriage:', marriedJessica);
+// NOTE: Not create new object in HEAP.
+
+// Copying objects
+const jessica2 = {
+  firstName: 'Jessica',
+  lastName: 'Yang',
+  age: 27,
+  family: ['Alice', 'Bob'],
+};
+
+const jessicaCopy = Object.assign({}, jessica2);
+jessicaCopy.lastName = 'Ding';
+console.log('before marriage:', jessica2);
+console.log('after marriage:', jessicaCopy);
+//NOTE: Shallow Copy: Create new object in HEAP. If there
+//NOTE: will only copy the properties
+
+jessicaCopy.family.push('Mary');
+jessicaCopy.family.push('John');
+console.log('before marriage:', jessica2);
+console.log('after marriage:', jessicaCopy);
+
+//TODO: Deep copy

@@ -74,3 +74,7 @@ Why hoisting? to use functions before actual declaration.
 ## How the this keyword works
 
 ![alt text](./def-thisKeyword.png)
+
+## Premitive VS. Reference values
+
+![alt text](./primitive_Reference.png)
