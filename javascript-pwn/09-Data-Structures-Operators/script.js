@@ -16,7 +16,11 @@ const openingHours = {
     open: 11,
     close: 23,
   },
-  [`day-${1 + 2}`]: {
+  // [`day-${1 + 2}`]: {
+  //   open: 0, // Open 24 hours
+  //   close: 24,
+  // },
+  sat: {
     open: 0, // Open 24 hours
     close: 24,
   },
@@ -58,37 +62,25 @@ const restaurant = {
   openingHours, //NOTE**9 Enhanced Object literal */
 };
 
-//**10 Optional Chain */
-if (restaurant.openingHours && restaurant.openingHours.mon) {
-  console.log(restaurant.openingHours.mon.open);
-}
-
-//**8 The For - of Loop*/
-// const menu = [...restaurant.mainMenu, ...restaurant.starterMenu];
-
-// for (let item of menu) console.log(item);
-// for (let [index, el] of menu.entries()) {
-//   // console.log(items);
-//   console.log(`${index + 1}  ${el}`);
-// }
-
-// console.log([...menu.entries()]);
-
 ///////////////////////////////////////
+// Coding Challenge #2
 /* 
-We're building a football betting app (soccer for my American friends 😅)!
+Let's continue with our football betting app!
 
-Suppose we get data from a web service about a certain game (below). In this challenge we're gonna work with the data. So here are your tasks:
+1. Loop over the game.scored array and print each player name to the console, along with the goal number (Example: "Goal 1: Lewandowski")
+2. Use a loop to calculate the average odd and log it to the console (We already studied how to calculate averages, you can go check if you don't remember)
+3. Print the 3 odds to the console, but in a nice formatted way, exaclty like this:
+      Odd of victory Bayern Munich: 1.33
+      Odd of draw: 3.25
+      Odd of victory Borrussia Dortmund: 6.5
+Get the team names directly from the game object, don't hardcode them (except for "draw"). HINT: Note how the odds and the game objects have the same property names 😉
 
-1. Create one player array for each team (variables 'players1' and 'players2')
-2. The first player in any player array is the goalkeeper and the others are field players. For Bayern Munich (team 1) create one variable ('gk') with the goalkeeper's name, and one array ('fieldPlayers') with all the remaining 10 field players
-3. Create an array 'allPlayers' containing all players of both teams (22 players)
-4. During the game, Bayern Munich (team 1) used 3 substitute players. So create a new array ('players1Final') containing all the original team1 players plus 'Thiago', 'Coutinho' and 'Perisic'
-5. Based on the game.odds object, create one variable for each odd (called 'team1', 'draw' and 'team2')
-6. Write a function ('printGoals') that receives an arbitrary number of player names (NOT an array) and prints each of them to the console, along with the number of goals that were scored in total (number of player names passed in)
-7. The team with the lower odd is more likely to win. Print to the console which team is more likely to win, WITHOUT using an if/else statement or the ternary operator.
-
-TEST DATA FOR 6: Use players 'Davies', 'Muller', 'Lewandowski' and 'Kimmich'. Then, call the function again with players from game.scored
+BONUS: Create an object called 'scorers' which contains the names of the players who scored as properties, and the number of goals as the value. In this game, it will look like this:
+      {
+        Gnarby: 1,
+        Hummels: 1,
+        Lewandowski: 2
+      }
 
 GOOD LUCK 😀
 */
@@ -132,6 +124,139 @@ const game = {
     team2: 6.5,
   },
 };
+
+//1
+const scoredArr = game.scored;
+for (const [index, name] of scoredArr.entries()) {
+  console.log(`Goal ${index + 1}: ${name} `);
+}
+
+//2 - My version
+// let avg;
+// let sum = 0;
+// const scoresArr = Object.values(game.odds);
+// for (const score of scoresArr) {
+//   sum += score;
+//   avg = sum / scoresArr.length;
+// }
+// console.log('the avg is : ', avg);
+// 2-Jonas Version, NOTE: Much better .
+
+const odds = Object.values(game.odds);
+let avg = 0;
+for (const odd of odds) avg += odd;
+avg /= odds.length;
+console.log(avg);
+
+//3
+let teamName;
+for (const [teamInd, odd] of Object.entries(game.odds)) {
+  teamName = game[teamInd] ? 'victory ' + game[teamInd] : 'draw';
+  console.log(`Odd of ${teamName}: ${odd}`);
+}
+
+//bonus-1
+const arr = Object.values(game.scored);
+const counter = {};
+arr.forEach(ele => {
+  if (counter[ele]) {
+    counter[ele] += 1;
+  } else {
+    counter[ele] = 1;
+  }
+});
+console.log(counter);
+
+//bonus-2 ??TODO
+const scorers = {};
+for (const player of game.scored) {
+  scorers[player] ? scorers[player]++ : (scorers[player] = 1);
+}
+console.log(scorers);
+
+//**11 Looping Objects In-directly */
+// //Property Names: Object name. NOTE: Object.keys()
+// const nameProperties = Object.keys(openingHours);
+// console.log(nameProperties);
+
+// for (const key of nameProperties) {
+//   console.log(key);
+//   console.log(
+//     `we go resturant on ${key} and the opening time is ${openingHours?.[key]?.open} to ${openingHours?.[key]?.close}`
+//   );
+// }
+
+// //Property Values
+// const valProperties = Object.values(openingHours);
+// console.log(valProperties);
+
+// // Entire Object
+// const entries = Object.entries(openingHours);
+// console.log(entries);
+
+// for (const [day, { open, close }] of entries) {
+//   //de-construct
+//   console.log(
+//     `Today is ${day}, and the resturant opening hour is from ${open} to ${close}`
+//   );
+// }
+
+//**10 Optional Chain */
+// // 1)Intro
+// if (restaurant.openingHours && restaurant.openingHours.mon) {
+//   console.log(restaurant.openingHours.mon.open);
+// }
+// if (restaurant.openingHours.fri) console.log(restaurant.openingHours.fri.open);
+
+// // NOTE: ES6. WITH OPTIONAL CHAIN. If certain property does not exist, then undefined is returned immediately .
+// console.log(restaurant.openingHours.mon?.open); //NOTE: like Nullish, false value not inclue '' or 0
+// console.log(restaurant.openingHours?.mon?.open);
+
+// //2) Example: Optinal chain with nullish coalescing operator
+// const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+// for (const day of days) {
+//   const open = restaurant.openingHours[day]?.open ?? 'closed';
+//   console.log(`On ${day}, we opne at ${open}`);
+// }
+
+// //3) with Methods
+// console.log(restaurant.order?.(0, 1) ?? 'Method does not exits!');
+// console.log(restaurant.orderChineseCusin?.(0, 1) ?? 'Method does not exist!');
+
+// //4) with Array
+// const restaurantCus = [{ name: 'Jonas', wife: 'Anaa', dau: 'Lisa' }];
+// console.log(restaurantCus[0]?.name ?? 'User does not exist!');
+
+//**8 The For - of Loop*/
+// const menu = [...restaurant.mainMenu, ...restaurant.starterMenu];
+
+// for (let item of menu) console.log(item);
+// for (let [index, el] of menu.entries()) {
+//   // console.log(items);
+//   console.log(`${index + 1}  ${el}`);
+// }
+
+// console.log([...menu.entries()]);
+
+///////////////////////////////////////
+// Coding Challenge #1
+/* 
+We're building a football betting app (soccer for my American friends 😅)!
+
+Suppose we get data from a web service about a certain game (below). In this challenge we're gonna work with the data. So here are your tasks:
+
+1. Create one player array for each team (variables 'players1' and 'players2')
+2. The first player in any player array is the goalkeeper and the others are field players. For Bayern Munich (team 1) create one variable ('gk') with the goalkeeper's name, and one array ('fieldPlayers') with all the remaining 10 field players
+3. Create an array 'allPlayers' containing all players of both teams (22 players)
+4. During the game, Bayern Munich (team 1) used 3 substitute players. So create a new array ('players1Final') containing all the original team1 players plus 'Thiago', 'Coutinho' and 'Perisic'
+5. Based on the game.odds object, create one variable for each odd (called 'team1', 'draw' and 'team2')
+6. Write a function ('printGoals') that receives an arbitrary number of player names (NOT an array) and prints each of them to the console, along with the number of goals that were scored in total (number of player names passed in)
+7. The team with the lower odd is more likely to win. Print to the console which team is more likely to win, WITHOUT using an if/else statement or the ternary operator.
+
+TEST DATA FOR 6: Use players 'Davies', 'Muller', 'Lewandowski' and 'Kimmich'. Then, call the function again with players from game.scored
+
+GOOD LUCK 😀
+*/
 
 // const [players1, players2] = game.players;
 // console.log('players1: ', players1);
@@ -192,7 +317,7 @@ const game = {
 // const restaurantGuest = restaurant.numGuests || 100;
 // console.log(restaurantGuest);
 
-// //NOTE:NULLISH : null and undefined -> flase value(NOT 0 or '')
+//NOTE:NULLISH : null and undefined -> flase value(NOT include 0 or '')
 // const restaurantGuestCorrect = restaurant.numGuests ?? 100;
 // console.log(restaurantGuestCorrect);
 
