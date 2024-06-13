@@ -62,6 +62,189 @@ const restaurant = {
   openingHours, //NOTE**9 Enhanced Object literal */
 };
 
+//**16 String */
+
+///////////////////////////////////////
+// Coding Challenge #3
+
+/* 
+Let's continue with our football betting app! This time, we have a map with a log of the events that happened during the game. 
+The values are the events themselves, and the keys are the minutes in which each event happened (a football game has 90 minutes plus some extra time).
+
+1. Create an array 'events' of the different game events that happened (no duplicates)
+2. After the game has finished, is was found that the yellow card from minute 64 was unfair. So remove this event from the game events log.
+3. Print the following string to the console: "An event happened, on average, every 9 minutes" (keep in mind that a game has 90 minutes)
+4. Loop over the events and log them to the console, marking whether it's in the first half or second half (after 45 min) of the game, like this:
+      [FIRST HALF] 17: ⚽️ GOAL
+
+GOOD LUCK 😀
+*/
+
+/*
+const gameEvents = new Map([
+  [17, '⚽️ GOAL'],
+  [36, '🔁 Substitution'],
+  [47, '⚽️ GOAL'],
+  [61, '🔁 Substitution'],
+  [64, '🔶 Yellow card'],
+  [69, '🔴 Red card'],
+  [70, '🔁 Substitution'],
+  [72, '🔁 Substitution'],
+  [76, '⚽️ GOAL'],
+  [80, '⚽️ GOAL'],
+  [92, '🔶 Yellow card'],
+]);
+//1
+const events = new Set([...gameEvents.values()]);
+console.log(events);
+
+//2
+gameEvents.delete(64);
+
+//3
+console.log(
+  `An event happened, on average, every ${90 / gameEvents.size} minutes`
+);
+const time = [...gameEvents.keys()].pop();
+console.log(time);
+console.log(
+  `An event happened, on average, every ${time / gameEvents.size} minutes`
+);
+
+//4
+for (const [time, res] of gameEvents) {
+  time < 45
+    ? console.log(`[FIRST HALF] ${time}: ${res}`)
+    : console.log(`[SECOND HALF] ${time}: ${res}`);
+}
+
+//**15_ Data Structure Overview */
+/**
+ * Note:
+ * 1.where is the origin of Js?
+ *      > from programm itself, like source code, some status
+ *      > from UI, like user input or written in DOM
+ *      > from Web Api, like data from other web application
+ * 2. difference betwwen array&set vs. object&map
+ */
+
+//**14_ Maps Iteration */
+// 1 create map - Syntax
+/*
+const question = new Map([
+  ['question', 'What is the best programming language in the world?'],
+  [1, 'C'],
+  [2, 'Java'],
+  [3, 'JavaScript'],
+  ['correct', 3],
+  [true, 'Correct 🎉'],
+  [false, 'Try again!'],
+]);
+console.log(question);
+
+console.log(Object.entries(openingHours)); // [Array(2), Array(2), Array(2)]
+// 2 COnvert Object to map
+const hoursMap = new Map(Object.entries(openingHours));
+console.log(hoursMap);
+
+//Example: Quiz
+console.log(question.get('question'));
+for (const [key, value] of question) {
+  if (typeof key === 'number') console.log(`Answer ${key} : ${value}`);
+}
+// const answer = Number(prompt('Your answer?'));
+const answer = 3;
+console.log(answer);
+console.log(question.get(answer === question.get('correct')));
+
+// convert map to arrays
+console.log([...question]);
+console.log([...question.keys()]);
+console.log([...question.values()]);
+
+//**13 Maps_ Fundamental */
+/**
+ * NOTE:
+ * 1.key-value, sorted like the object, but the key can be any kinds of data type, like objects, arrays or other maps
+ *    (in Object, keys are basically always string)
+ */
+/**
+const rest = new Map();
+//1) add element
+rest.set('name', 'Classico Italiano');
+rest.set(1, 'Firenze, Italy');
+console.log(rest.set(2, 'Lisbon, Portugal')); // map.set will return the updated map
+// 2) add elements like chain
+rest
+  .set('categories', ['Italian', 'Pizzeria', 'Vegetarian', 'Organic'])
+  .set('open', 11)
+  .set('close', 23)
+  .set(true, 'We are open :D')
+  .set(false, 'We are closed :(');
+// 3) identify element belong to map or not, return true or false
+console.log(rest.has('name'));
+// 4) delete elemnt and delete all
+rest.delete(2);
+// rest.clear();
+
+// 5) retrieve element
+console.log(rest.get('name'));
+console.log(rest.get(true));
+console.log(rest.get(1));
+
+// Example: Map elements with true or false
+const time = 8;
+console.log(rest.get(time > rest.get('open') && time < rest.get('close')));
+
+// 6) NOTE: Use map to set DOM
+rest.set(document.querySelector('h1'), 'Heading');
+console.log(rest);
+
+// 7) NOTE: Usig details
+const arr = [1, 2];
+rest.set(arr, 'Test');
+console.log(rest.get(arr));
+
+//**12 Sets*/
+/**
+ * NOTE:
+ * 1.elements in set is unquie
+ * 2.sets are iterable
+ * review: Iterables can be used for arrays, strings, maps, sets. NOT objects .
+ *
+ * Arrays vs. Set
+ * arrays: could retrieve elements by index(Set could not), and elements inside can be duplicated
+ */
+
+// const menus = ['pizza', 'pizza', 'ice-cream', 'pizza', 'ice-cream', 'pasta'];
+// const menuSet = new Set(menus);
+// console.log(menuSet);
+// //1) Sets properties: count set size
+// console.log(menuSet.size);
+// //2) identify whether element exist in set or not, return true or false
+// console.log(menuSet.has('pizza'));
+// console.log(menuSet.has('Pizza')); //false
+// console.log(menuSet.has('bread')); //false
+// //3) add new element into set
+// menuSet.add('sausage');
+// menuSet.add('sandwich');
+// console.log(menuSet);
+// //4) remove element
+// menuSet.delete('pizza');
+// const res = menuSet.delete('cocacola'); // element not exist, and return flase
+// // console.log(res);
+// console.log(menuSet);
+// //5) remove all elements
+// menuSet.clear();
+// console.log(menuSet);
+
+// //6) Sets with Array
+// const restaurantRole = ['chief', 'manager', 'chief', 'waiter', 'waiter'];
+// console.log(new Set(restaurantRole)); // know what kind of role exist in restaurant
+// console.log(new Set(restaurantRole).size); // same as above
+// //7) Sets with Array, convert set to array
+// console.log([...new Set(restaurantRole)]);
+
 ///////////////////////////////////////
 // Coding Challenge #2
 /* 
@@ -125,6 +308,7 @@ const game = {
   },
 };
 
+/**
 //1
 const scoredArr = game.scored;
 for (const [index, name] of scoredArr.entries()) {
@@ -173,6 +357,8 @@ for (const player of game.scored) {
   scorers[player] ? scorers[player]++ : (scorers[player] = 1);
 }
 console.log(scorers);
+ */
+/////////////////////////////////////////////////////////////////////////////////////
 
 //**11 Looping Objects In-directly */
 // //Property Names: Object name. NOTE: Object.keys()
@@ -365,9 +551,9 @@ GOOD LUCK 😀
 // // console.log(arr);//[1,2,3,4]
 // // console.log(...arr);// 1,2,3,4
 
-// //NOTE: REST , because on LEFT side of =
-// //NOTE: Otherwize, Rest is to combine single element as a arr
-// //NOTE: 打包
+//NOTE: REST , because on LEFT side of =
+//NOTE: Otherwize, Rest is to combine single element as a arr
+//NOTE: 打包
 // const [a, b, ...others] = [1, 2, 3, 4, 5];
 // console.log(a, b, others);
 
@@ -377,11 +563,11 @@ GOOD LUCK 😀
 // ];
 // console.log(pizza, risotto, otherDishes);
 
-// //NOTE: REST work on Object
+//NOTE: REST work on Object
 // const { sat, ...weekdays } = restaurant.openingHours;
 // console.log(weekdays);
 
-// // 2) Functions
+// 2) Functions
 // const add = function (...numbers) {
 //   let sum = 0;
 //   for (let i = 0; i < numbers.length; i++) sum += numbers[i];
