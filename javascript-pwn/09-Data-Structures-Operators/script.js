@@ -62,7 +62,245 @@ const restaurant = {
   openingHours, //NOTE**9 Enhanced Object literal */
 };
 
-//**16 String */
+///////////////////////////////////////
+// Coding Challenge #4
+
+/* 
+Write a program that receives a list of variable names written in underscore_case and convert them to camelCase.
+
+The input will come from a textarea inserted into the DOM (see code below), and conversion will happen when the button is pressed.
+
+THIS TEST DATA (pasted to textarea)
+underscore_case
+ first_name
+Some_Variable 
+  calculate_AGE
+delayed_departure
+
+SHOULD PRODUCE THIS OUTPUT (5 separate console.log outputs)
+underscoreCase      ✅
+firstName           ✅✅
+someVariable        ✅✅✅
+calculateAge        ✅✅✅✅
+delayedDeparture    ✅✅✅✅✅
+
+HINT 1: Remember which character defines a new line in the textarea 😉
+HINT 2: The solution only needs to work for a variable made out of 2 words, like a_b
+HINT 3: Start without worrying about the ✅. Tackle that only after you have the variable name conversion working 😉
+HINT 4: This challenge is difficult on purpose, so start watching the solution in case you're stuck. Then pause and continue!
+
+Afterwards, test with your own test data!
+
+GOOD LUCK 😀
+*/
+
+document.body.append(document.createElement('textarea'));
+document.body.append(document.createElement('button'));
+
+document.querySelector('button').addEventListener('click', function () {
+  const strs = document.querySelector('textarea').value.split('\n');
+  for (const [index, row] of strs){
+    const processedRow = 
+  }
+});
+
+const convertUnderScoreToCamelCase = function (str) {
+  const strArr = str.split('_');
+  const camels = [];
+  for (let i = 0; i < strArr.length; i++) {
+    // console.log(strArr[i] + '--' + i);
+    if (i === 0) {
+      camels.push(strArr[i].toLowerCase());
+    } else camels.push(strArr[i][0].toUpperCase() + strArr[i].slice(1));
+  }
+
+  return camels.join(''); //convert array to string without comma
+};
+
+// console.log(convertUnderScoreToCamelCase('first_name_haha_yiyi_xixi'));
+// console.log(convertUnderScoreToCamelCase('Some_Variable'));
+// console.log(convertUnderScoreToCamelCase('calculate_AGE'));
+// console.log(convertUnderScoreToCamelCase('delayed_departure'));
+
+//**17 String - Part3 */
+/*
+//1) Split and join
+console.log('a+very+nice+string'.split('+'));
+console.log('Jonas Schmedtmann'.split(' '));
+
+// String deconstruct
+const [firstName, lastName] = 'Jonas Schmedtmann'.split(' ');
+console.log(firstName, lastName);
+
+const newName = ['Mr.', firstName, lastName.toUpperCase()].join(' ');
+console.log(newName);
+
+//Quick Ex
+const capitalizeName = function (name) {
+  const names = name.toLowerCase().split(' ');
+  // console.log(names);
+  const newNames = [];
+  for (const n of names) {
+    // newNames.push(n[0].toUpperCase() + n.slice(1));
+    newNames.push(n.replace(n[0], n[0].toUpperCase()));
+  }
+  console.log(newNames);
+};
+
+capitalizeName('jessica ann smith davis');
+capitalizeName('jonas schmedtmann');
+
+//2) Padding
+const message = 'Go to gate 23!';
+console.log(message.padStart(25, 'x').padEnd(40, 'x'));
+
+//Quick Ex
+const maskCreditCard = function (cardNumber) {
+  const str = cardNumber + ''; // all parameter convert to string first
+  const endFourNumber = str.slice(-4);
+  return endFourNumber.padStart(str.length, '*');
+};
+
+console.log(maskCreditCard(646378234));
+console.log(maskCreditCard(43378463864647384));
+console.log(maskCreditCard('3348594938477557749707'));
+
+// 3) repeat
+const message2 = 'Bad waether... All Departues Delayed... ';
+console.log(message2.repeat(5));
+
+//Quick Ex
+const planesInLine = function (planeNumber) {
+  console.log(
+    `There is ${planeNumber} planes in line ${'💨'.repeat(planeNumber)}`
+  );
+};
+
+planesInLine(5);
+planesInLine(3);
+planesInLine(12);
+
+//**16 String - Part2 */
+/*
+const airline = 'TAP Air Portugal';
+
+//1) String format, uppercase, lowercase
+console.log(airline.toUpperCase());
+console.log(airline.toLowerCase());
+
+//Quick Ex1 - Fix capitalization in name
+const passenger = 'jOnAS'; // Jonas
+console.log(
+  passenger.slice(0, 1).toUpperCase() + passenger.slice(1).toLowerCase()
+);
+// Jonas Version:
+// const passengerLower = passenger.toLowerCase();
+// const passengerCorrect =
+//   passengerLower[0].toUpperCase() + passengerLower.slice(1);
+// console.log(passengerCorrect);
+
+//Quick Ex2 - Comparing emails
+//2) String trim, rm space from string
+const email = 'hello@jonas.io';
+const loginEmail = '  Hello@Jonas.Io \n';
+
+const lowerEmail = loginEmail.toLowerCase();
+const trimmedEmail = lowerEmail.trim();
+// console.log(lowerEmail);
+// console.log(trimmedEmail);
+const normalEmail = loginEmail.toLowerCase().trim(); // trim, also 'console.log(loginEmail.trimStart());' or trimEnd()
+console.log(normalEmail);
+console.log(normalEmail === email);
+
+//3) String replacement
+const priceGB = '288,97£';
+const priceUS = priceGB.replace('£', '$').replace(',', '.');
+console.log(priceUS);
+
+const announcement =
+  'All passengers come to boarding door 23. Boarding door 23!';
+console.log(announcement.replace('door', 'gate')); // only replace the first one
+// replace all element
+console.log(announcement.replaceAll('door', 'gate'));
+// use regular expression to replace all element
+console.log(announcement.replace(/door/g, 'gate'));
+
+//4) String with boolean, and identify whether element exist in String or not
+const plane = 'Airbus A320neo';
+console.log(plane.includes('Airbus'));
+console.log(plane.includes('airbus'));
+console.log(plane.includes('A'));
+console.log(plane.startsWith('Airb'));
+
+//Quick Ex
+if (plane.startsWith('Airbus') && plane.endsWith('neo')) {
+  console.log('Part of the NEW ARirbus family');
+}
+
+//Quick Ex-2
+const checkBaggage = function (items) {
+  const baggage = items.toLowerCase();
+
+  if (baggage.includes('knife') || baggage.includes('gun')) {
+    console.log('You are NOT allowed on board');
+  } else {
+    console.log('Welcome aboard!');
+  }
+};
+
+checkBaggage('I have a laptop, some Food and a pocket Knife');
+checkBaggage('Socks and camera');
+checkBaggage('Got some snacks and a gun for protection');
+
+//**16 String - Part1 */
+/*
+const airline = 'TAP Air Portugal';
+const plane = 'A320';
+
+// 1) retrieve element from String
+console.log(plane[0]);
+console.log(plane[1]);
+console.log(plane[2]);
+console.log('B108'[1]);
+
+// 2) get string length
+console.log(plane.length);
+console.log(airline.length);
+console.log('B737'.length);
+
+// 3) get element index in String
+console.log(airline.indexOf('r'));
+console.log(airline.lastIndexOf('r'));
+console.log(airline.indexOf('portugal')); // -1
+
+// 4) Intercept elements of a string
+console.log(airline.slice(4)); // NOTE: 左闭右开; String.slice(startIndex, endIndex) .
+console.log(airline.slice(4, 7));
+
+console.log(airline.slice(0, airline.indexOf(' '))); // Get the first ' '
+console.log(airline.slice(airline.lastIndexOf(' ') + 1)); // Get the last ' '
+
+console.log(airline.slice(-2)); // get element from des order
+console.log(airline.slice(1, -1));
+
+//Quick Ex
+const checkMiddleSeat = function (seat) {
+  const s = seat.slice(-1);
+  if ('B' === s || 'E' === s) {
+    console.log('You got the middle seat 😬');
+  } else {
+    console.log('You got lucky 😎');
+  }
+};
+
+checkMiddleSeat('11B');
+checkMiddleSeat('23C');
+checkMiddleSeat('3E');
+
+//Behind the String
+console.log(new String('jonas'));
+console.log(typeof new String('jonas')); // object
+console.log(typeof new String('jonas').slice(1));//string
 
 ///////////////////////////////////////
 // Coding Challenge #3
@@ -307,11 +545,10 @@ const game = {
     team2: 6.5,
   },
 };
-
 /**
 //1
 const scoredArr = game.scored;
-for (const [index, name] of scoredArr.entries()) {
+for (const [index, name] of scoredArr.entries()) { //NOTE: arr.entries() ->> iterator the array elements
   console.log(`Goal ${index + 1}: ${name} `);
 }
 
