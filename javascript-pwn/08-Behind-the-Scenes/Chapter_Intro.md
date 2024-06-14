@@ -73,8 +73,12 @@ Why hoisting? to use functions before actual declaration.
 
 ## How the this keyword works
 
-![alt text](./def-thisKeyword.png)
+> Keyword this belong to function owner; and this is **NOT** static
 
-## Premitive VS. Reference values
+#### this
 
-![alt text](./primitive_Reference.png)
+> _Method_ : this = Object tht is calling the method
+> _Simple function call_ : this = undefined (In strict mode)
+> _Arrow functions_ : this = this of surrounding function _(like their parent)
+> \_Event listener_ : this = DOM element that the handler is attched to
+> ![alt text](./def-thisKeyword.png)
