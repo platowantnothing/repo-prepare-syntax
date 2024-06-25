@@ -143,106 +143,339 @@
 
 ///////////////////////////////////////
 //**06 The call and apply Methods
-const lufthansa = {
-  airline: 'Lufthansa',
-  iataCode: 'LH',
-  bookings: [],
+// const lufthansa = {
+//   airline: 'Lufthansa',
+//   iataCode: 'LH',
+//   bookings: [],
 
-  // book: function(){}
-  book(flightNum, name) {
-    console.log(
-      `${name} booked a seat on ${this.airline} flight ${this.iataCode}${flightNum}`
-    );
-    this.bookings.push({ flight: `${this.iataCode}${flightNum}`, name });
-  },
-};
+//   // book: function(){}
+//   book(flightNum, name) {
+//     console.log(
+//       `${name} booked a seat on ${this.airline} flight ${this.iataCode}${flightNum}`
+//     );
+//     this.bookings.push({ flight: `${this.iataCode}${flightNum}`, name });
+//   },
+// };
 
-lufthansa.book(123, 'Tom');
-lufthansa.book(635, 'John Smith');
+// lufthansa.book(123, 'Tom');
+// lufthansa.book(635, 'John Smith');
 
-const sichuanaireline = {
-  airline: 'scairline',
-  iataCode: 'SC',
-  bookings: [],
-};
+// const sichuanaireline = {
+//   airline: 'scairline',
+//   iataCode: 'SC',
+//   bookings: [],
+// };
 
-// try to use lufthansa's book method
-const bookMethod = lufthansa.book;
+// // try to use lufthansa's book method
+// const bookMethod = lufthansa.book;
 
-// NOT WORK, this undefined
-// bookMethod(23, 'Sarah Williams');
+// // NOT WORK, this undefined
+// // bookMethod(23, 'Sarah Williams');
 
-// NOTE: this + call(), manually set this keyword for function call
-bookMethod.call(sichuanaireline, 23, 'Sarah Williams');
-console.log(sichuanaireline);
+// // NOTE: this + call(), manually set this keyword for function call
+// bookMethod.call(sichuanaireline, 23, 'Sarah Williams');
+// console.log(sichuanaireline);
 
-bookMethod.call(lufthansa, 239, 'Mary Cooper');
-console.log(lufthansa);
+// bookMethod.call(lufthansa, 239, 'Mary Cooper');
+// console.log(lufthansa);
 
-const swiss = {
-  airline: 'Swiss Air Lines',
-  iataCode: 'LX',
-  bookings: [],
-};
+// const swiss = {
+//   airline: 'Swiss Air Lines',
+//   iataCode: 'LX',
+//   bookings: [],
+// };
 
-bookMethod.call(swiss, 11, 'Taylor Swift');
+// bookMethod.call(swiss, 11, 'Taylor Swift');
 
-// NOTE: this + apply(), barelly used for modernJs
-//defference between apply with call, parameter is defferent
-const passengers1 = [99, 'William Bollorise'];
-bookMethod.apply(swiss, passengers1);
+// // NOTE: this + apply(), barelly used for modernJs
+// //defference between apply with call, parameter is defferent
+// const passengers1 = [99, 'William Bollorise'];
+// bookMethod.apply(swiss, passengers1);
 
-//NOTE: replace by call
-const passengers2 = [12, 'Joda Bollorise'];
-bookMethod.call(swiss, ...passengers2);
-console.log(swiss);
+// //NOTE: replace by call
+// const passengers2 = [12, 'Joda Bollorise'];
+// bookMethod.call(swiss, ...passengers2);
+// console.log(swiss);
+
+// ///////////////////////////////////////
+// //**07 The bind Method
+// // NOTE: return a new function by using bind
+
+// // const bookMethod = lufthansa
+// // bookMethod.call(lufthansa, 44, 'Lu GuangZhong')
+
+// const bookLH = bookMethod.bind(lufthansa); // new function
+// bookLH(76, 'Shaw Jolin');
+// console.log(lufthansa);
+
+// const bookSC = bookMethod.bind(sichuanaireline);
+// const bookSW = bookMethod.bind(swiss);
+
+// // NOTE: partial application, which means apply some function by setting default parameter
+// const bookLH33 = bookMethod.bind(lufthansa, 33);
+// bookLH33('Eson Chen');
+// bookLH33('Martha Cooper');
+// console.log(lufthansa);
+
+// // WITH Event Listeners
+// lufthansa.plane = 300;
+// lufthansa.buyPlane = function (plane) {
+//   console.log('print ____', this);
+//   this.plane++;
+//   console.log(this.plane);
+// };
+
+// // lufthansa.buyPlane();
+// const bindBuyPlane = lufthansa.buyPlane.bind(lufthansa);
+// document.querySelector('.buy').addEventListener('click', bindBuyPlane);
+
+// //Partial Application
+// const addTax = (rate, val) => val + val * rate;
+// console.log(addTax(0.1, 200));
+
+// const addProTax = addTax.bind(null, 0.23);
+// console.log(addProTax(200));
+// console.log(addProTax(100));
+
+// //Partial Application -> function return function
+// const addTaxRate = function (rate) {
+//   return function (val) {
+//     return val + val * rate;
+//   };
+// };
+
+// const cnaRate = addTaxRate(0.5);
+// console.log(cnaRate(100));
 
 ///////////////////////////////////////
-//**07 The bind Method
-// NOTE: return a new function by using bind
+// Coding Challenge #1
 
-// const bookMethod = lufthansa
-// bookMethod.call(lufthansa, 44, 'Lu GuangZhong')
+/* 
+Let's build a simple poll app!
 
-const bookLH = bookMethod.bind(lufthansa); // new function
-bookLH(76, 'Shaw Jolin');
-console.log(lufthansa);
+A poll has a question, an array of options from which people can choose, and an array with the number of replies for each option. This data is stored in the starter object below.
 
-const bookSC = bookMethod.bind(sichuanaireline);
-const bookSW = bookMethod.bind(swiss);
+Here are your tasks:
 
-// NOTE: partial application, which means apply some function by setting default parameter
-const bookLH33 = bookMethod.bind(lufthansa, 33);
-bookLH33('Eson Chen');
-bookLH33('Martha Cooper');
-console.log(lufthansa);
+1. Create a method called 'registerNewAnswer' on the 'poll' object. The method does 2 things:
+  1.1. Display a prompt window for the user to input the number of the selected option. The prompt should look like this:
+        What is your favourite programming language?
+        0: JavaScript
+        1: Python
+        2: Rust
+        3: C++
+        (Write option number)
+  
+  1.2. Based on the input number, update the answers array. For example, if the option is 3, increase the value AT POSITION 3 of the array by 1. Make sure to check if the input is a number and if the number makes sense (e.g answer 52 wouldn't make sense, right?)
+2. Call this method whenever the user clicks the "Answer poll" button.
+3. Create a method 'displayResults' which displays the poll results. The method takes a string as an input (called 'type'), which can be either 'string' or 'array'. 
+  If type is 'array', simply display the results array as it is, using console.log(). This should be the default option. If type is 'string', display a string like "Poll results are 13, 2, 4, 1". 
+4. Run the 'displayResults' method at the end of each 'registerNewAnswer' method call.
 
-// WITH Event Listeners
-lufthansa.plane = 300;
-lufthansa.buyPlane = function (plane) {
-  console.log('print ____', this);
-  this.plane++;
-  console.log(this.plane);
-};
+HINT: Use many of the tools you learned about in this and the last section 😉
 
-// lufthansa.buyPlane();
-const bindBuyPlane = lufthansa.buyPlane.bind(lufthansa);
-document.querySelector('.buy').addEventListener('click', bindBuyPlane);
+BONUS: Use the 'displayResults' method to display the 2 arrays in the test data. Use both the 'array' and the 'string' option. Do NOT put the arrays in the poll object! So what shoud the this keyword look like in this situation?
 
-//Partial Application
-const addTax = (rate, val) => val + val * rate;
-console.log(addTax(0.1, 200));
+BONUS TEST DATA 1: [5, 2, 3]
+BONUS TEST DATA 2: [1, 5, 3, 9, 6, 1]
 
-const addProTax = addTax.bind(null, 0.23);
-console.log(addProTax(200));
-console.log(addProTax(100));
+GOOD LUCK 😀
+*/
 
-//Partial Application -> function return function
-const addTaxRate = function (rate) {
-  return function (val) {
-    return val + val * rate;
-  };
-};
+// const poll = {
+//   question: 'What is your favourite programming language?',
+//   options: ['0: JavaScript', '1: Python', '2: Rust', '3: C++'],
+//   // This generates [0, 0, 0, 0]. More in the next section 😃
+//   answers: new Array(4).fill(0),
 
-const cnaRate = addTaxRate(0.5);
-console.log(cnaRate(100));
+//   registerNewAnser() {
+//     const result = Number(
+//       prompt(
+//         `${this.question}\n${this.options.join('\n')}\n(Write option number)`
+//       )
+//     );
+
+//     //register anwser NOTE: circuiting
+//     typeof result === 'number' &&
+//       result < this.answers.length &&
+//       this.answers[result]++;
+
+//     // console.log(this.answers);
+//     this.displayResults();
+//     this.displayResults('string');
+//   },
+
+//   //NOTE:
+//   displayResults(type = 'array') {
+//     if (type === 'array') {
+//       console.log(this.answers);
+//     } else if (type === 'string') {
+//       // Poll results are 13, 2, 4, 1
+//       console.log(this);
+//       console.log(`Poll results are ${this.answers.join(', ')}`);
+//     }
+//   },
+// };
+
+// document
+//   .querySelector('.poll')
+//   .addEventListener('click', poll.registerNewAnser.bind(poll));
+
+// const displayResult = poll.displayResults;
+// displayResult.call({ answers: [5, 2, 3] });
+// displayResult.call({ answers: [1, 5, 3, 9, 6, 1] }, 'string'); //NOTE: .
+
+//  [5, 2, 3]
+//  [1, 5, 3, 9, 6, 1]
+
+// const poll = {
+//   question: 'What is your favourite programming language?',
+//   options: ['0: JavaScript', '1: Python', '2: Rust', '3: C++'],
+//   // This generates [0, 0, 0, 0]. More in the next section 😃
+//   answers: new Array(4).fill(0),
+//   // answers: [1, 34, 22, 1],
+
+//   //1 create method registerNewAnser
+//   registerNewAnser() {
+//     //[1,2,3].join('=') >>>> 1=2=3
+//     let output = '';
+//     output += this.question + '\n';
+//     for (const row of this.options) {
+//       output += row + '\n';
+//     }
+//     const result = prompt(`${output}`);
+//     console.log(result);
+//     if (result <= 3 && result >= 0) {
+//       this.answers[result] = 1;
+//     } else alert('Invalid number ...');
+
+//     return newDisplayRes(this.answers);
+//   },
+// };
+
+// //2
+// const anserPoll = poll.registerNewAnser.bind(poll);
+// document.querySelector('.poll').addEventListener('click', anserPoll);
+
+// //3
+// const displayResults = function (...type) {
+//   console.log(this);
+//   console.log(`Poll results are ${type}`);
+// };
+
+// const newDisplayRes = displayResults.bind(poll);
+// // newDisplayRes(poll.answers);
+
+///////////////////////////////////////
+//**08 Immediately Invoked Function Expressions (IIFE)
+//NOTE: Syntax, make function only execute 1 time
+
+// const printNum = function () {
+//   console.log('23');
+// };
+
+// printNum();
+// printNum();
+
+// // Syntax1:
+// (function () {
+//   console.log(23);
+//   const privateVal = 23;
+// })();
+
+// // console.log(privateVal); Cannot retrieve out-scope value
+// //Syntax2:
+// (() => console.log('xixi'))();
+
+//**09- closure */
+// NOTE: 1 closure is not explicite and we cannot decalre
+// const secureBooking = function () {
+//   let passengerCount = 0;
+//   return function () {
+//     passengerCount++;
+//     console.log(`${passengerCount} passgeners`);
+//   };
+// };
+
+// const booker = secureBooking(); // booker is the function
+
+// booker(); // closure happened
+// booker();
+// booker();
+// // NOTE: 2 any function always has access to the variable environment  of the execution environment where function is created
+// // NOTE: JS will check closure first, then check scope chain
+// /**
+//  * check img:
+//  * 01- closure
+//  * 02- slosure summary
+//  */
+
+// console.dir(booker); // [[Scopes]]: variable environment and as internal properties which cannot access from code
+
+//**10- more closure example*/
+// Example 1:
+// let f;
+
+// const g = function () {
+//   const a = 23;
+//   f = function () {
+//     // f clpsure, access a
+//     console.log(a * 2);
+//   };
+// };
+
+// const h = function () {
+//   const b = 777;
+//   f = function () {
+//     console.log(b * 2);
+//   };
+// };
+
+// g();
+// f();
+// console.dir(f);
+
+// // function f is re-assgined
+// h();
+// f();
+// console.dir(f);
+
+// // Example 2:
+// const boardPassengers = function (n, wait) {
+//   const perGroup = n / 3;
+
+//   setTimeout(function () {
+//     console.log(`We are noew boarding all ${n} passengers`);
+//     console.log(`There are 3 groups, each with ${perGroup} passengers`);
+//   }, wait * 1000); // inside function will be executed after 1000 ms
+
+//   console.log(`Will start boarding in ${wait} seconds`);
+// };
+
+// const perGroup = 1000;
+// boardPassengers(180, 3);
+
+///////////////////////////////////////
+// Coding Challenge #2
+/* 
+This is more of a thinking challenge than a coding challenge 🤓
+Take the IIFE below and at the end of the function, 
+attach an event listener that changes the color of the selected h1 element ('header') to blue, 
+each time the BODY element is clicked. Do NOT select the h1 element again!
+
+And now explain to YOURSELF (or someone around you) WHY this worked! Take all the time you need. Think about WHEN exactly the callback function is executed, and what that means for the variables involved in this example.
+GOOD LUCK 😀
+*/
+
+(function () {
+  const header = document.querySelector('h1');
+  header.style.color = 'red';
+
+  document.querySelector('body').addEventListener('click', function () {
+    header.style.color = 'blue';
+  });
+
+  console.dir(function () {
+    header.style.color = 'blue';
+  });
+})();
