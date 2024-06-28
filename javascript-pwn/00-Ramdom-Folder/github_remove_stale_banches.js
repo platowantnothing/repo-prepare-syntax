@@ -1,3 +1,4 @@
+// https://stackoverflow.com/questions/39065544/how-do-i-remove-all-stale-branches-from-github
 async function deleteStaleBranches(delay = 500) {
   var stale_branches = document.querySelectorAll(
     '[aria-label="Delete branch"]'
