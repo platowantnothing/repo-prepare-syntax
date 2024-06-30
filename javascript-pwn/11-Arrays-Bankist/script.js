@@ -565,6 +565,7 @@ GOOD LUCK 😀
 // console.log(firstWithdrawal);
 //NOTE: find can be used as filter, but different with .filter()
 // //1）filter return a new array, but find only return an element based on filter condition
+//NOTE: filter() return an array which fillful the condition, but find() only return the first element which fulfill that condition
 
 // const account = accounts.find(account => account.owner === 'Jessica Davis');
 // console.log(account);
@@ -692,6 +693,7 @@ GOOD LUCK 😀
 //   // console.log([...document.querySelectorAll('.movements__value')]);
 // });
 
+console.log('---------------------');
 ///////////////////////////////////////
 // Array Methods Practice
 // const bankDepositSum = accounts.map(acc => acc.movements).flat();
@@ -701,13 +703,58 @@ const bankDepositSum = accounts
   .reduce((sum, cur) => sum + cur, 0);
 console.log(bankDepositSum);
 
-// 2
+// 2. count account which deposit over 1000
 const numDespositsOver1000 = accounts
   .flatMap(acc => acc.movements)
   .filter(mov => mov > 1000).length;
 console.log(numDespositsOver1000);
 
+// 2. count account which deposit over 1000 by using reduce()
+// reduce (accumulate, currentElement)
 const numDespositsOver10001 = accounts
   .flatMap(acc => acc.movements)
-  .reduce((count, cur) => (cur > 1000 ? count + 1 : count), 0);
+  // .reduce((count, cur) => (cur > 1000 ? count + 1 : count), 0);
+  .reduce((count, cur) => (cur > 1000 ? ++count : count), 0);
 console.log(numDespositsOver10001);
+
+// NOTE: count++ vs. ++count :
+let a = 10;
+console.log(a++); // return the old value
+console.log(a);
+
+//Prefixed ++ operator
+let b = 10;
+console.log(++b); //11
+console.log(b); //11
+
+//3.NOTE: more practice with reduce(),
+//Sample1 : count deposite and withdrawl by object
+const sums = accounts
+  .flatMap(acc => acc.movements)
+  .reduce(
+    (sums, cur) => {
+      // cur > 0 ? (sums.deposits += cur) : (sums.withdrawals += cur);
+      sums[cur > 0 ? 'deposits' : 'withdrawals'] += cur;
+      return sums;
+    },
+    { deposits: 0, withdrawals: 0 }
+  );
+console.log(sums);
+
+//4.covert string with title sentence
+// this is a nice title -> This Is a Nice Title
+const convertTitleCase = function (sentense) {
+  const exprections = ['a', 'an', 'the', 'but', 'in', 'or'];
+
+  const titleCase = sentense
+    .toLowerCase()
+    .split(' ')
+    .map(word =>
+      exprections.includes(word) ? word : word[0].toUpperCase() + word.slice(1)
+    )
+    .join(' ');
+  return titleCase;
+};
+
+console.log(convertTitleCase('This is a nice title'));
+console.log(convertTitleCase('This is the LONG title'));
