@@ -803,38 +803,117 @@ const dogs = [
 ];
 
 //1
-const calculateFoodPortion = function (dogs) {
-  dogs.forEach(dog => (dog.recommendedFood = dog.weight ** 0.75 * 28));
-};
-calculateFoodPortion(dogs);
+dogs.forEach(
+  dog => (dog.recommendedFood = Math.trunc(dog.weight ** 0.75 * 28))
+);
+// const calculateFoodPortion = function (dogs) {
+//   dogs.forEach(
+//     dog => (dog.recommendedFood = Math.trunc(dog.weight ** 0.75 * 28))
+//   );
+// };
+// calculateFoodPortion(dogs);
 
 //2 Find Sarah's dog and log to the console whether it's eating too much or too little.
 //  HINT: Some dogs have multiple owners, so you first need to find Sarah in the owners array, and so this one is a bit tricky (on purpose) 🤓
-const identifyFoodLevel = function (dog) {
-  if (dog.curFood > dog.recommendedFood * 1.1) {
-    console.log(`${dog.owners}'s Dog eats to much!`);
-  } else if (dog.curFood < dog.recommendedFood * 0.9) {
-    console.log(`${dog.owners}'s Dog eats to lttle!`);
-  } else {
-    console.log(`Keep..`);
-  }
-};
+const sarahDog = dogs.find(dog => dog.owners.includes('Sarah'));
+console.log(sarahDog);
+console.log(
+  `Sarah's dog is eating too ${
+    sarahDog.curFood > sarahDog.recommendedFood ? 'much' : 'little'
+  }!`
+);
 
-const findSarahDog = function (dogs) {
-  // forEach() does not return a value
-  dogs.forEach(dog => {
-    if (dog.owners.includes('Sarah')) {
-      identifyFoodLevel(dog);
-    }
-  });
-};
-findSarahDog(dogs);
+// const identifyFoodLevel = function (dog) {
+//   if (dog.curFood > dog.recommendedFood * 1.1) {
+//     console.log(`${dog.owners}'s Dog eats to much!`);
+//   } else if (dog.curFood < dog.recommendedFood * 0.9) {
+//     console.log(`${dog.owners}'s Dog eats to lttle!`);
+//   } else {
+//     console.log(`Keep..`);
+//   }
+// };
+
+// const findSarahDog = function (dogs) {
+//   // forEach() does not return a value
+//   dogs.forEach(dog => {
+//     if (dog.owners.includes('Sarah')) {
+//       identifyFoodLevel(dog);
+//     }
+//   });
+// };
+// findSarahDog(dogs);
 
 //3. Create an array containing all owners of dogs who eat too much ('ownersEatTooMuch') and an array with all owners of dogs who eat too little ('ownersEatTooLittle').
-const ownersEatTooMuch = function (dogs) {
-  dogs.forEach((e, i, arr) => {
-    console.log(e);
-  });
-};
+const ownersEatTooMuch = dogs
+  .filter(dog => dog.curFood > dog.recommendedFood)
+  .flatMap(dog => dog.owners);
+console.log(ownersEatTooMuch);
 
-console.log(ownersEatTooMuch(dogs));
+const ownersEatTooLittle = dogs
+  .filter(dog => dog.curFood < dog.recommendedFood)
+  .flatMap(dog => dog.owners);
+console.log(ownersEatTooLittle);
+// let ownersEatTooMuch = [];
+// let ownersEatTooLittle = [];
+// const identifyOwnerEatTooMuchOrLess = function (dogs) {
+//   dogs.forEach(dog => {
+//     if (dog.curFood > dog.recommendedFood * 1.1) {
+//       ownersEatTooMuch.push(dog.owners);
+//     } else if (dog.curFood < dog.recommendedFood * 0.9) {
+//       ownersEatTooLittle.push(dog.owners);
+//     }
+//   });
+// };
+
+// identifyOwnerEatTooMuchOrLess(dogs);
+// console.log(ownersEatTooMuch.flat());
+// console.log(ownersEatTooLittle.flat());
+
+//4. Log a string to the console for each array created in 3.,
+// like this: "Matilda and Alice and Bob's dogs eat too much!" and "Sarah and John and Michael's dogs eat too little!"
+console.log(`${ownersEatTooMuch.flat().join(' and ')}'s dogs eat too much!`);
+console.log(
+  `${ownersEatTooLittle.flat().join(' and ')}'s dogs eat too little!`
+);
+
+//5. Log to the console whether there is any dog eating EXACTLY the amount of food that is recommended (just true or false)
+console.log(dogs.some(dog => dog.curFood === dog.recommendedFood));
+// const anyDogEatingExactly = function (dogs) {
+//   dogs.forEach(dog => {
+//     dog.recommendedFood === dog.curFood
+//       ? console.log(true)
+//       : console.log(false);
+//     console.log('-');
+//   });
+// };
+// anyDogEatingExactly(dogs);
+
+// 6. Log to the console whether there is any dog eating an OKAY amount of food (just true or false)
+const checkEatingOkay = dog =>
+  dog.curFood > dog.recFood * 0.9 && dog.curFood < dog.recFood * 1.1;
+console.log(dogs.some(checkEatingOkay));
+// console.log('----');
+// const dogsEatOk = [];
+// const anyDogEatingOK = function (dogs) {
+//   dogs.forEach(dog => {
+//     console.log('-');
+//     dog.curFood <= dog.recommendedFood * 1.1 &&
+//     dog.curFood >= dog.recommendedFood * 0.9
+//       ? console.log(true)
+//       : console.log(false);
+//     dog.curFood <= dog.recommendedFood * 1.1 &&
+//       dog.curFood >= dog.recommendedFood * 0.9 &&
+//       dogsEatOk.push(dog);
+//   });
+// };
+// anyDogEatingOK(dogs);
+// console.log(dogsEatOk);
+// 7. Create an array containing the dogs that are eating an OKAY amount of food (try to reuse the condition used in 6.)
+console.log(dogs.filter(checkEatingOkay));
+
+// console.log(dogs);
+// 8. Create a shallow copy of the dogs array and sort it by recommended food portion in an ascending order (keep in mind that the portions are inside the array's objects)
+// const orderDogsByRefood = dogs
+//   .slice()
+//   .sort((d1, d2) => d1.recommendedFood - d2.recommendedFood);
+// console.log(orderDogsByRefood);
