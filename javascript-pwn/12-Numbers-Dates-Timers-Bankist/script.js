@@ -81,19 +81,28 @@ const inputClosePin = document.querySelector('.form__input--pin');
 /////////////////////////////////////////////////
 // Functions
 
-const displayMovements = function (movements, sort = false) {
+const displayMovements = function (acc, sort = false) {
   containerMovements.innerHTML = '';
 
-  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+  const movs = sort
+    ? acc.movements.slice().sort((a, b) => a - b)
+    : acc.movements;
 
   movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
+
+    const movementDate = new Date(acc.movementsDates[i]);
+    const year = movementDate.getFullYear();
+    const month = `${movementDate.getMonth() + 1}`.padStart(2, 0);
+    const day = `${movementDate.getDate()}`.padStart(2, 0);
+    const dislayDate = `${day}/${month}/${year}`;
 
     const html = `
       <div class="movements__row">
         <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
+        <div class="movements__date">${dislayDate}</div>
         <div class="movements__value">${mov.toFixed(2)}€</div>
       </div>
     `;
@@ -142,7 +151,7 @@ createUsernames(accounts);
 
 const updateUI = function (acc) {
   // Display movements
-  displayMovements(acc.movements);
+  displayMovements(acc);
 
   // Display balance
   calcDisplayBalance(acc);
@@ -154,6 +163,21 @@ const updateUI = function (acc) {
 ///////////////////////////////////////
 // Event handlers
 let currentAccount;
+
+// FAKE ALWAYS LOGGERD IN
+currentAccount = account1;
+updateUI(currentAccount);
+containerApp.style.opacity = 100;
+
+// Current Balance Log Date
+// day/month/year
+const currentDate = new Date();
+const year = currentDate.getFullYear();
+const month = `${currentDate.getMonth() + 1}`.padStart(2, 0);
+const day = `${currentDate.getDate()}`.padStart(2, 0);
+const hour = `${currentDate.getHours()}`.padStart(2, 0);
+const minutes = `${currentDate.getMinutes()}`.padStart(2, 0);
+labelDate.textContent = `${day}/${month}/${year} ${hour}:${minutes}`;
 
 btnLogin.addEventListener('click', function (e) {
   // Prevent form from submitting
@@ -198,6 +222,10 @@ btnTransfer.addEventListener('click', function (e) {
     currentAccount.movements.push(-amount);
     receiverAcc.movements.push(amount);
 
+    // Add date
+    currentAccount.movementsDates.push(new Date().toISOString());
+    receiverAcc.movementsDates.push(new Date().toISOString());
+
     // Update UI
     updateUI(currentAccount);
   }
@@ -211,6 +239,9 @@ btnLoan.addEventListener('click', function (e) {
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
     // Add movement
     currentAccount.movements.push(amount);
+
+    // Add date
+    currentAccount.movementsDates.push(new Date().toISOString());
 
     // Update UI
     updateUI(currentAccount);
@@ -244,7 +275,7 @@ btnClose.addEventListener('click', function (e) {
 let sorted = false;
 btnSort.addEventListener('click', function (e) {
   e.preventDefault();
-  displayMovements(currentAccount.movements, !sorted);
+  displayMovements(currentAccount, !sorted);
   sorted = !sorted;
 });
 
@@ -378,3 +409,81 @@ console.log(31_536_000_000);
 console.log(Number.parseInt(23_000));
 
 //**5 bigInt */
+console.log(Number.MAX_SAFE_INTEGER);
+// bigInt 出现于2020，解决大额数字计算的精度问题
+console.log(9007199254740991 + 11);
+// create bigInt number
+console.log(9007199254740991n);
+console.log(BigInt(9007199254740991));
+
+//Operation
+console.log(1000n + 1000n);
+console.log();
+
+// MATH operation not work
+// console.log(Math.sqrt(16n));
+
+// cannot mix bigInt with regular number
+const huge = 239819473978492389487n;
+const num = 23;
+console.log(huge * BigInt(num));
+
+console.log(23n > 12); //true
+console.log(20n === 20); //false
+console.log(typeof 20n);
+console.log(20n == 20); //true
+
+console.log(huge + ' is REALLY BIG');
+
+// Divisions
+console.log(10n / 3n); // return the closet bigInt //3n
+console.log(10 / 3);
+
+//**6 Dates and time */
+/*
+// 1 create date
+const now = new Date();
+console.log(now);
+
+// Sample: using string to create date, but normally it is not safe
+console.log(new Date('Tue Jul 02 2024  11:12:54'));
+console.log(new Date('December 25,2024'));
+// Best practice: how to generate date
+console.log(new Date(account1.movementsDates[0]));
+
+console.log('-');
+// using constructor to create date
+// month start from 0
+console.log(new Date(2024, 1, 29, 12, 22, 30));
+console.log(new Date(2024, 10, 31));
+
+// using unix time
+console.log(new Date(0));
+console.log(new Date(3 * 24 * 60 * 60 * 1000)); 
+*/
+
+// 2 Woring with dates
+const future = new Date(2033, 11, 14, 14, 23);
+console.log(future);
+console.log(future.getFullYear());
+console.log(future.getMonth());
+console.log(future.getDate()); // the day
+console.log(future.getDay()); // the week?
+console.log(future.getHours());
+console.log(future.getMinutes());
+console.log(future.getSeconds());
+console.log(future.toISOString()); // ISO stardard, string to store somewhere
+console.log(future.getTime()); //2018154180000
+console.log(new Date(2018154180000));
+
+// current date
+console.log(Date.now());
+console.log(new Date(1719931152744));
+
+// setXX() for date
+future.setFullYear(2059);
+console.log(future);
+
+//**6 Operation with dates  */
+
+//**7 Internalizaing dates (INTL) */
