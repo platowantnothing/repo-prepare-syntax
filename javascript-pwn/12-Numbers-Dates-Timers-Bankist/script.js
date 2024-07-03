@@ -16,14 +16,14 @@ const account1 = {
   pin: 1111,
 
   movementsDates: [
-    '2019-11-18T21:31:17.178Z',
-    '2019-12-23T07:42:02.383Z',
-    '2020-01-28T09:15:04.904Z',
-    '2020-04-01T10:17:24.185Z',
-    '2020-05-08T14:11:59.604Z',
-    '2020-05-27T17:01:17.194Z',
-    '2020-07-11T23:36:17.929Z',
-    '2020-07-12T10:51:36.790Z',
+    '2024-07-01T21:31:17.178Z',
+    '2024-05-23T07:42:02.383Z',
+    '2024-04-28T09:15:04.904Z',
+    '2024-04-01T10:17:24.185Z',
+    '2024-03-08T14:11:59.604Z',
+    '2024-02-27T17:01:17.194Z',
+    '2024-02-11T23:36:17.929Z',
+    '2024-01-12T10:51:36.790Z',
   ],
   currency: 'EUR',
   locale: 'pt-PT', // de-DE
@@ -80,6 +80,31 @@ const inputClosePin = document.querySelector('.form__input--pin');
 
 /////////////////////////////////////////////////
 // Functions
+// FORMATE MOVEMENT DATE
+const formatMovementDate = function (movementDate, locale) {
+  const calcDaysPassed = (d1, d2) =>
+    Math.round(Math.abs(d1 - d2) / (24 * 60 * 60 * 1000));
+
+  const daysPassed = calcDaysPassed(new Date(), new Date(movementDate));
+  // console.log('dayPassed: ', daysPassed);
+
+  if (daysPassed === 0) return 'Today';
+  if (daysPassed === 1) return 'Yesterday';
+  if (daysPassed <= 7) return `${daysPassed} days ago`;
+  // const year = movementDate.getFullYear();
+  // const month = `${movementDate.getMonth() + 1}`.padStart(2, 0);
+  // const day = `${movementDate.getDate()}`.padStart(2, 0);
+  // return `${day}/${month}/${year}`;
+  return new Intl.DateTimeFormat(locale).format(movementDate);
+};
+
+// FORMATE MOVEMENT NUMBER
+const formatMovementNumber = function (movement, locale, currency) {
+  return Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: currency,
+  }).format(movement);
+};
 
 const displayMovements = function (acc, sort = false) {
   containerMovements.innerHTML = '';
@@ -92,18 +117,19 @@ const displayMovements = function (acc, sort = false) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
 
     const movementDate = new Date(acc.movementsDates[i]);
-    const year = movementDate.getFullYear();
-    const month = `${movementDate.getMonth() + 1}`.padStart(2, 0);
-    const day = `${movementDate.getDate()}`.padStart(2, 0);
-    const dislayDate = `${day}/${month}/${year}`;
+    const displayDate = formatMovementDate(movementDate, acc.locale);
+    // console.log(displayDate);
+
+    //Format movements
+    const displayMov = formatMovementNumber(mov, acc.locale, acc.currency);
 
     const html = `
       <div class="movements__row">
         <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
-        <div class="movements__date">${dislayDate}</div>
-        <div class="movements__value">${mov.toFixed(2)}€</div>
+        <div class="movements__date">${displayDate}</div>
+        <div class="movements__value">${displayMov}</div>
       </div>
     `;
 
@@ -113,19 +139,34 @@ const displayMovements = function (acc, sort = false) {
 
 const calcDisplayBalance = function (acc) {
   acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${acc.balance.toFixed(2)}€`;
+  // labelBalance.textContent = `${acc.balance.toFixed(2)}€`;
+  labelBalance.textContent = formatMovementNumber(
+    acc.balance,
+    acc.locale,
+    acc.currency
+  );
 };
 
 const calcDisplaySummary = function (acc) {
   const incomes = acc.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumIn.textContent = `${incomes.toFixed(2)}€`;
+  // labelSumIn.textContent = `${incomes.toFixed(2)}€`;
+  labelSumIn.textContent = formatMovementNumber(
+    incomes,
+    acc.locale,
+    acc.currency
+  );
 
   const out = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumOut.textContent = `${Math.abs(out).toFixed(2)}€`;
+  // labelSumOut.textContent = `${Math.abs(out).toFixed(2)}€`;
+  labelSumOut.textContent = formatMovementNumber(
+    Math.abs(out),
+    acc.locale,
+    acc.currency
+  );
 
   const interest = acc.movements
     .filter(mov => mov > 0)
@@ -135,7 +176,12 @@ const calcDisplaySummary = function (acc) {
       return int >= 1;
     })
     .reduce((acc, int) => acc + int, 0);
-  labelSumInterest.textContent = `${interest.toFixed(2)}€`;
+  // labelSumInterest.textContent = `${interest.toFixed(2)}€`;
+  labelSumInterest.textContent = formatMovementNumber(
+    interest,
+    acc.locale,
+    acc.currency
+  );
 };
 
 const createUsernames = function (accs) {
@@ -169,15 +215,21 @@ currentAccount = account1;
 updateUI(currentAccount);
 containerApp.style.opacity = 100;
 
-// Current Balance Log Date
-// day/month/year
-const currentDate = new Date();
-const year = currentDate.getFullYear();
-const month = `${currentDate.getMonth() + 1}`.padStart(2, 0);
-const day = `${currentDate.getDate()}`.padStart(2, 0);
-const hour = `${currentDate.getHours()}`.padStart(2, 0);
-const minutes = `${currentDate.getMinutes()}`.padStart(2, 0);
-labelDate.textContent = `${day}/${month}/${year} ${hour}:${minutes}`;
+// Experimenting API
+const now = new Date();
+const options = {
+  hour: 'numeric',
+  minute: 'numeric',
+  day: 'numeric',
+  month: 'long', // numeric
+  year: 'numeric',
+  weekday: 'long',
+};
+
+const locale = navigator.language;
+// console.log(locale);
+
+labelDate.textContent = new Intl.DateTimeFormat(locale, options).format(now);
 
 btnLogin.addEventListener('click', function (e) {
   // Prevent form from submitting
@@ -194,6 +246,33 @@ btnLogin.addEventListener('click', function (e) {
       currentAccount.owner.split(' ')[0]
     }`;
     containerApp.style.opacity = 100;
+
+    // Current Balance Log Date
+    // day/month/year
+    // const currentDate = new Date();
+    // const year = currentDate.getFullYear();
+    // const month = `${currentDate.getMonth() + 1}`.padStart(2, 0);
+    // const day = `${currentDate.getDate()}`.padStart(2, 0);
+    // const hour = `${currentDate.getHours()}`.padStart(2, 0);
+    // const minutes = `${currentDate.getMinutes()}`.padStart(2, 0);
+    // labelDate.textContent = `${day}/${month}/${year} ${hour}:${minutes}`;
+    const now = new Date();
+    const options = {
+      hour: 'numeric',
+      minute: 'numeric',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      weekday: 'long',
+    };
+
+    // const locale = navigator.language;
+    // console.log(locale);
+
+    labelDate.textContent = new Intl.DateTimeFormat(
+      currentAccount.locale,
+      options
+    ).format(now);
 
     // Clear input fields
     inputLoginUsername.value = inputLoginPin.value = '';
@@ -283,44 +362,44 @@ btnSort.addEventListener('click', function (e) {
 /////////////////////////////////////////////////
 // LECTURES
 //**1 */
-//NOTE 1. In Js, for number, only has 1 kind data type, float
-console.log(23 === 23.0);
+// //NOTE: 1. In Js, for number, only has 1 kind data type, float
+// console.log(23 === 23.0);
 
-// binary
-console.log(0.1 + 0.2 === 0.3); //flase
+// // binary
+// console.log(0.1 + 0.2 === 0.3); //flase
 
-// Conversion
-console.log(Number('23'));
-console.log(+'23');
+// // Conversion
+// console.log(Number('23'));
+// console.log(+'23');
 
-// Parsing
-console.log(Number.parseInt('30px', 10));
-console.log(Number.parseInt('e30m', 10));
+// // Parsing
+// console.log(Number.parseInt('30px', 10));
+// console.log(Number.parseInt('e30m', 10));
 
-console.log(Number.parseInt(' 2.3rem '));
-console.log(Number.parseFloat(' 2.3rem '));
+// console.log(Number.parseInt(' 2.3rem '));
+// console.log(Number.parseFloat(' 2.3rem '));
 
-// Above functions are global function, so can be used as:
-console.log(parseInt(' 11.3rem ')); //NOT Recommand
+// // Above functions are global function, so can be used as:
+// console.log(parseInt(' 11.3rem ')); //NOT Recommand
 
-// check if value is NAN
-// isNaN():The Number.isNaN() static method determines whether the passed value is the number value NaN, and returns false if the input is not of the Number type.
-console.log(Number.isNaN(20));
-console.log(Number.isNaN('20'));
-console.log(Number.isNaN(+'20'));
-console.log(Number.isNaN(+'20x'));
-console.log(Number.isNaN(23 / 0));
-// console.log(23 / 0);
+// // check if value is NAN
+// // isNaN():The Number.isNaN() static method determines whether the passed value is the number value NaN, and returns false if the input is not of the Number type.
+// console.log(Number.isNaN(20));
+// console.log(Number.isNaN('20'));
+// console.log(Number.isNaN(+'20'));
+// console.log(Number.isNaN(+'20x'));
+// console.log(Number.isNaN(23 / 0));
+// // console.log(23 / 0);
 
-// check if value is number
-console.log(Number.isFinite(23));
-console.log(Number.isFinite('23'));
-console.log(Number.isFinite(+'23x'));
-console.log(Number.isFinite(14 / 0));
+// // check if value is number
+// console.log(Number.isFinite(23));
+// console.log(Number.isFinite('23'));
+// console.log(Number.isFinite(+'23x'));
+// console.log(Number.isFinite(14 / 0));
 
-console.log(Number.isInteger(23)); //true
-console.log(Number.isInteger(23.0));
-console.log(Number.isInteger(23 / 0));
+// console.log(Number.isInteger(23)); //true
+// console.log(Number.isInteger(23.0));
+// console.log(Number.isInteger(23 / 0));
 
 //**2 Math and Rounding*/
 /**
@@ -345,99 +424,99 @@ Math.floor() // work for negative situation
 (2.7). to Fix(0)
 
  */
-console.log(Math.sqrt(25));
-console.log(25 ** (1 / 2));
+// console.log(Math.sqrt(25));
+// console.log(25 ** (1 / 2));
 
-console.log(Math.max(1, 34, 67, 33, 53, 2));
-console.log(Math.max(1, 34, '67', 33, 53, 2));
-console.log(Math.max(1, 34, '67x', 33, 53, 2)); //NaN
+// console.log(Math.max(1, 34, 67, 33, 53, 2));
+// console.log(Math.max(1, 34, '67', 33, 53, 2));
+// console.log(Math.max(1, 34, '67x', 33, 53, 2)); //NaN
 
-console.log(Math.min(1, 34, 67, 33, 53, 2));
+// console.log(Math.min(1, 34, 67, 33, 53, 2));
 
-console.log(Math.PI * Number.parseFloat('20px') * 2);
+// console.log(Math.PI * Number.parseFloat('20px') * 2);
 
-console.log(Math.trunc(Math.random() * 10 + 1));
+// console.log(Math.trunc(Math.random() * 10 + 1));
 
-//Rounding:
-console.log(Math.trunc(23.3)); //23
-console.log(Math.trunc(23.9)); //23
-console.log(Math.trunc(-23.9)); //-23 **
+// //Rounding:
+// console.log(Math.trunc(23.3)); //23
+// console.log(Math.trunc(23.9)); //23
+// console.log(Math.trunc(-23.9)); //-23 **
 
-console.log(Math.round(23.3)); //23
-console.log(Math.round(23.9)); //24
+// console.log(Math.round(23.3)); //23
+// console.log(Math.round(23.9)); //24
 
-// round down
-console.log(Math.floor(23.5)); //23
-console.log(Math.floor(23.9)); //23
-console.log(Math.floor(-23.9)); //-24 **
+// // round down
+// console.log(Math.floor(23.5)); //23
+// console.log(Math.floor(23.9)); //23
+// console.log(Math.floor(-23.9)); //-24 **
 
-// round up
-console.log(Math.ceil(23.3)); //24
-console.log(Math.ceil(23.9)); //24
-console.log(Math.ceil(-23.2)); // -23
+// // round up
+// console.log(Math.ceil(23.3)); //24
+// console.log(Math.ceil(23.9)); //24
+// console.log(Math.ceil(-23.2)); // -23
 
-// trim input number and return as string
-console.log((23.1238).toFixed(2));
+// // trim input number and return as string
+// console.log((23.1238).toFixed(2));
 
 //**3 reminder operator */
-console.log(10 % 3);
+// console.log(10 % 3);
 
-//Sample1: identify even or odd number
-const isEvenNumber = num => num % 2 === 0;
-console.log(isEvenNumber(10));
-console.log(isEvenNumber(11));
-console.log(isEvenNumber(17));
+// //Sample1: identify even or odd number
+// const isEvenNumber = num => num % 2 === 0;
+// console.log(isEvenNumber(10));
+// console.log(isEvenNumber(11));
+// console.log(isEvenNumber(17));
 
-//Sample2: execute N times jobs, by using reminder operator
-labelBalance.addEventListener('click', function () {
-  [...document.querySelectorAll('.movements__row')].forEach((row, index) => {
-    //0,2,4...
-    if (index % 2 === 0) {
-      row.style.backgroundColor = '#60b347';
-    }
-    //0,3,6,9...
-    if (index % 3 === 0) {
-      row.style.backgroundColor = 'blue';
-    }
-  });
-});
+// //Sample2: execute N times jobs, by using reminder operator
+// labelBalance.addEventListener('click', function () {
+//   [...document.querySelectorAll('.movements__row')].forEach((row, index) => {
+//     //0,2,4...
+//     if (index % 2 === 0) {
+//       row.style.backgroundColor = '#60b347';
+//     }
+//     //0,3,6,9...
+//     if (index % 3 === 0) {
+//       row.style.backgroundColor = 'blue';
+//     }
+//   });
+// });
 
 //**4 Numeric sperator */
-console.log(1_000_123);
-console.log(31_536_000_000);
+// console.log(1_000_123);
+// console.log(31_536_000_000);
 
-console.log(Number.parseInt(23_000));
+// console.log(Number.parseInt(23_000));
 
 //**5 bigInt */
-console.log(Number.MAX_SAFE_INTEGER);
-// bigInt 出现于2020，解决大额数字计算的精度问题
-console.log(9007199254740991 + 11);
-// create bigInt number
-console.log(9007199254740991n);
-console.log(BigInt(9007199254740991));
+// console.log(Number.MAX_SAFE_INTEGER);
+// // bigInt 出现于2020，解决大额数字计算的精度问题
+// console.log(9007199254740991 + 11);
+// // create bigInt number
+// console.log(9007199254740991n);
+// console.log(BigInt(9007199254740991));
 
-//Operation
-console.log(1000n + 1000n);
-console.log();
+// //Operation
+// console.log(1000n + 1000n);
+// console.log();
 
-// MATH operation not work
-// console.log(Math.sqrt(16n));
+// // MATH operation not work
+// // console.log(Math.sqrt(16n));
 
-// cannot mix bigInt with regular number
-const huge = 239819473978492389487n;
-const num = 23;
-console.log(huge * BigInt(num));
+// // cannot mix bigInt with regular number
+// const huge = 239819473978492389487n;
+// const num = 23;
+// console.log(huge * BigInt(num));
 
-console.log(23n > 12); //true
-console.log(20n === 20); //false
-console.log(typeof 20n);
-console.log(20n == 20); //true
+// console.log(23n > 12); //true
+// console.log(20n === 20); //false
+// console.log(typeof 20n);
+// console.log(20n == 20); //true
 
-console.log(huge + ' is REALLY BIG');
+// console.log(huge + ' is REALLY BIG');
 
-// Divisions
-console.log(10n / 3n); // return the closet bigInt //3n
-console.log(10 / 3);
+// // Divisions
+// console.log(10n / 3n); // return the closet bigInt //3n
+// console.log(10 / 3);
 
 //**6 Dates and time */
 /*
@@ -462,28 +541,74 @@ console.log(new Date(0));
 console.log(new Date(3 * 24 * 60 * 60 * 1000)); 
 */
 
-// 2 Woring with dates
-const future = new Date(2033, 11, 14, 14, 23);
-console.log(future);
-console.log(future.getFullYear());
-console.log(future.getMonth());
-console.log(future.getDate()); // the day
-console.log(future.getDay()); // the week?
-console.log(future.getHours());
-console.log(future.getMinutes());
-console.log(future.getSeconds());
-console.log(future.toISOString()); // ISO stardard, string to store somewhere
-console.log(future.getTime()); //2018154180000
-console.log(new Date(2018154180000));
+//// 2 Woring with dates
+// const future = new Date(2033, 11, 14, 14, 23);
+// console.log(future);
+// console.log(future.getFullYear());
+// console.log(future.getMonth());
+// console.log(future.getDate()); // the day
+// console.log(future.getDay()); // the week?
+// console.log(future.getHours());
+// console.log(future.getMinutes());
+// console.log(future.getSeconds());
+// console.log(future.toISOString()); // ISO stardard, string to store somewhere
+// console.log(future.getTime()); //2018154180000
+// console.log(new Date(2018154180000));
 
-// current date
-console.log(Date.now());
-console.log(new Date(1719931152744));
+//// current date
+// console.log(Date.now());
+// console.log(new Date(1719931152744));
 
-// setXX() for date
-future.setFullYear(2059);
-console.log(future);
+//// setXX() for date
+// future.setFullYear(2059);
+// console.log(future);
 
 //**6 Operation with dates  */
+// const future = new Date(2037, 10, 19, 15, 23);
+// console.log(+future);
+
+// // NOTE When the date is operation and it will automatically convert to timestamp to calc
+// // const calcDatePassed = (d1, d2) => Math.abs(d1 - d2) / (24 * 60 * 60 * 1000);
+// const calcDatePassed = (d1, d2) => {
+//   return Math.abs(d1.getTime() - d2.getTime()) / (24 * 60 * 60 * 1000);
+// };
+// console.log(
+//   calcDatePassed(new Date(2037, 10, 19, 15, 23), new Date(2037, 10, 9, 15, 23))
+// );
 
 //**7 Internalizaing dates (INTL) */
+
+//**8 Internalizaing numbers (INTL) */
+const num = 3884764.23;
+
+const numOptions = {
+  style: 'currency', // unit, currency
+  unit: 'celsius', //mile-per-hour
+  currency: 'EUR',
+  // useGrouping: false,
+};
+
+console.log('US: ', new Intl.NumberFormat('en-US', numOptions).format(num));
+console.log(
+  'Germany: ',
+  new Intl.NumberFormat('de-DE', numOptions).format(num)
+);
+console.log('Syria: ', new Intl.NumberFormat('ar-SY', numOptions).format(num));
+console.log('Browser: ', new Intl.NumberFormat(navigator.language).format(num));
+
+//**9 Timers: set timeout and set interval */
+
+//setTimeout()
+//Sample1: simulate to order pizza
+setTimeout(() => console.log('Here is your pizza🍕'), 3000); //millionsecond
+console.log('Waiting.....');
+
+//setInterval()
+
+//**10 Implement countdown timer*/
+
+// set time to 5 minutes
+// call the timer every second
+// in each call, print the remaining time to UI
+// decrese 1s
+// when 0 seconds, stop timer and log out user
