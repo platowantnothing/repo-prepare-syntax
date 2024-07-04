@@ -106,6 +106,36 @@ const formatMovementNumber = function (movement, locale, currency) {
   }).format(movement);
 };
 
+// IMPLEMENT COUNTDOWN TIMER
+const setCountDownTimer = function () {
+  const tick = function () {
+    const mins = String(Math.trunc(time / 60)).padStart(2, 0);
+    const seconds = String(time % 60).padStart(2, 0);
+
+    // in each call, print the remaining time to UI
+    labelTimer.textContent = `${mins}:${seconds}`;
+
+    // when 0 seconds, stop timer and log out user
+    if (time === 0) {
+      // Display UI and message
+      labelWelcome.textContent = 'Log in to get started';
+      containerApp.style.opacity = 0;
+    }
+
+    // decrese 1s
+    time--;
+  };
+
+  // set time to 5 minutes
+  let time = 20;
+
+  tick(); // invocate before setInterval, for UI
+
+  // call the timer every seconds
+  const timer = setInterval(tick, 1000);
+  return timer; // for clearTimer
+};
+
 const displayMovements = function (acc, sort = false) {
   containerMovements.innerHTML = '';
 
@@ -196,6 +226,10 @@ const createUsernames = function (accs) {
 createUsernames(accounts);
 
 const updateUI = function (acc) {
+  // Set a Logout Timer
+  if (timer) clearInterval(timer); // If there is a timer, then clear
+  timer = setCountDownTimer(); // SET Timer
+
   // Display movements
   displayMovements(acc);
 
@@ -208,12 +242,14 @@ const updateUI = function (acc) {
 
 ///////////////////////////////////////
 // Event handlers
-let currentAccount;
+let currentAccount, timer;
 
-// FAKE ALWAYS LOGGERD IN
-currentAccount = account1;
-updateUI(currentAccount);
-containerApp.style.opacity = 100;
+//// FAKE ALWAYS LOGGERD IN
+// currentAccount = account1;
+// updateUI(currentAccount);
+// containerApp.style.opacity = 100;
+//// FAKE Timer
+// setCountDownTimer();
 
 // Experimenting API
 const now = new Date();
@@ -316,14 +352,26 @@ btnLoan.addEventListener('click', function (e) {
   const amount = Math.floor(+inputLoanAmount.value);
 
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
-    // Add movement
-    currentAccount.movements.push(amount);
+    setTimeout(function () {
+      // Add movement
+      currentAccount.movements.push(amount);
+      // Add date
+      currentAccount.movementsDates.push(new Date().toISOString());
 
-    // Add date
-    currentAccount.movementsDates.push(new Date().toISOString());
+      // Update UI
+      updateUI(currentAccount);
+    }, 2000);
 
-    // Update UI
-    updateUI(currentAccount);
+    // const loan = function () {
+    //   // Add movement
+    //   currentAccount.movements.push(amount);
+    //   // Add date
+    //   currentAccount.movementsDates.push(new Date().toISOString());
+    // };
+    // // By using setTime to mock bank approves loan
+    // setTimeout(loan, 2000);
+    // // Update UI
+    // updateUI(currentAccount);
   }
   inputLoanAmount.value = '';
 });
@@ -567,7 +615,7 @@ console.log(new Date(3 * 24 * 60 * 60 * 1000));
 // const future = new Date(2037, 10, 19, 15, 23);
 // console.log(+future);
 
-// // NOTE When the date is operation and it will automatically convert to timestamp to calc
+// // NOTE: When the date is operation and it will automatically convert to timestamp to calc
 // // const calcDatePassed = (d1, d2) => Math.abs(d1 - d2) / (24 * 60 * 60 * 1000);
 // const calcDatePassed = (d1, d2) => {
 //   return Math.abs(d1.getTime() - d2.getTime()) / (24 * 60 * 60 * 1000);
@@ -579,31 +627,44 @@ console.log(new Date(3 * 24 * 60 * 60 * 1000));
 //**7 Internalizaing dates (INTL) */
 
 //**8 Internalizaing numbers (INTL) */
-const num = 3884764.23;
+// const num = 3884764.23;
 
-const numOptions = {
-  style: 'currency', // unit, currency
-  unit: 'celsius', //mile-per-hour
-  currency: 'EUR',
-  // useGrouping: false,
-};
+// const numOptions = {
+//   style: 'currency', // unit, currency
+//   unit: 'celsius', //mile-per-hour
+//   currency: 'EUR',
+//   // useGrouping: false,
+// };
 
-console.log('US: ', new Intl.NumberFormat('en-US', numOptions).format(num));
-console.log(
-  'Germany: ',
-  new Intl.NumberFormat('de-DE', numOptions).format(num)
-);
-console.log('Syria: ', new Intl.NumberFormat('ar-SY', numOptions).format(num));
-console.log('Browser: ', new Intl.NumberFormat(navigator.language).format(num));
+// console.log('US: ', new Intl.NumberFormat('en-US', numOptions).format(num));
+// console.log(
+//   'Germany: ',
+//   new Intl.NumberFormat('de-DE', numOptions).format(num)
+// );
+// console.log('Syria: ', new Intl.NumberFormat('ar-SY', numOptions).format(num));
+// console.log('Browser: ', new Intl.NumberFormat(navigator.language).format(num));
 
 //**9 Timers: set timeout and set interval */
 
-//setTimeout()
-//Sample1: simulate to order pizza
-setTimeout(() => console.log('Here is your pizza🍕'), 3000); //millionsecond
-console.log('Waiting.....');
+// //setTimeout()
+// //Sample1: simulate to order pizza
+// setTimeout(() => console.log('Here is your pizza🍕'), 3000); //millionsecond
+// console.log('Waiting.....');
 
-//setInterval()
+// const ingredients = ['olives', 'spinach'];
+// const pizzaTimer = setTimeout(
+//   (ing1, ing2) => console.log(`Here is your Pizza with ${ing1} and ${ing2} 🍕`),
+//   3000,
+//   ...ingredients
+// );
+
+// //Clear the timeout
+// if (ingredients.includes('olives')) clearTimeout(pizzaTimer);
+
+// //setInterval()
+// setInterval(function () {
+//   console.log(new Date());
+// }, 3000);
 
 //**10 Implement countdown timer*/
 
