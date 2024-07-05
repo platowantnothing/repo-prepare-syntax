@@ -152,9 +152,9 @@ btnScrollTo.addEventListener('click', function (e) {
   const s1ccords = section1.getBoundingClientRect();
   // console.log(s1ccords);
 
-  // console.log(e.target.getBoundingClientRect()); // console.log(this.getBoundingClientRect()); // e.target() same as this. which means that bottom coordinate
+  // console.log(e.target.getBoundingClientRect()); // console.log(this.getBoundingClientRect()); // NOTE e.target() same as this. which means that bottom coordinate
 
-  console.log('Current scroll (X/Y)', window.pageXOffset, pageYOffset);
+  console.log('Current scroll (X/Y)', window.pageXOffset, pageYOffset); // NOTE print curr
 
   // console.log(
   //   'height/width viewpoint:',
