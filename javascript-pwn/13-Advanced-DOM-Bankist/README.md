@@ -18,3 +18,53 @@ Keynotes:
 - In DOM, the unit is called as Node, like Object. _(From MDN, The DOM represents the document as nodes and objects)_
 - Based on Node, there are several notable subclasses: **Document**, **Element**, **Text**, **Comment**...
 - Like Java Inherit, the subclasses also could use parent class methods
+
+### 6 EVENT PROPAGATION: bubbling and capturing
+
+![alt text](.\screenshot\03-bubblingAndCapturing.png)
+Keynotes:
+
+- When an event happened, there are 3 phrase: capturing phrase, target phrase, bubbling phrase.
+- Capture phrase: event invocation from parenet element to target element. For example, anchor triggered from _Document_ to _anchor_.
+- Target phrase: event pass to target element, and invocation the related callback function.
+- Bubbling phrase: callback function passing from child element to parent element.
+
+Plus:
+
+- NOT ALL EVENT executed in target and bubbling phrase. Some of them happend in bubbling phrase.
+- Sample: if anchor element has an event to alert, and section also has an event to alert. Then, about alert, it has twice execution.
+
+From the Practice:
+
+- child event handle also trigger the parent event handle;
+- 从 bubbling phrase 去响应 event 来看，各级 element 打印的 event.target 都是 child element, 但打印 event.currentTarget 才是 element 本级自己
+
+```JavaScript
+// Ramdom generate number
+const ramNumGne = (min, max) =>
+min + Math.trunc(Math.random() \* (max - min + 1));
+
+// Change background color
+const changeBgColor = function () {
+return `rgb(${ramNumGne(0, 255)},${ramNumGne(0, 255)},${ramNumGne(0, 255)})`;
+};
+
+// Add Click Event
+document.querySelector('.nav__link').addEventListener('click', function (e) {
+this.style.backgroundColor = changeBgColor();
+console.log('LINK', e.target, e.currentTarget);
+
+console.log('print this and currentTarget: ', this === e.currentTarget);
+});
+
+document.querySelector('.nav__links').addEventListener('click', function (e) {
+this.style.backgroundColor = changeBgColor();
+console.log('LINKS', e.target, e.currentTarget);
+});
+
+document.querySelector('.nav').addEventListener('click', function (e) {
+this.style.backgroundColor = changeBgColor();
+console.log('NAV', e.target, e.currentTarget);
+});
+
+```
