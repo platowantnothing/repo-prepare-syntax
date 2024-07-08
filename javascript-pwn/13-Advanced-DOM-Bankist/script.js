@@ -11,6 +11,10 @@ const btnScrollTo = document.querySelector('.btn--scroll-to');
 const section1 = document.querySelector('#section--1');
 const navLink = document.querySelectorAll('.nav__link');
 const navLinks = document.querySelector('.nav__links');
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabsContent = document.querySelectorAll('.operations__content');
+const nav = document.querySelector('.nav');
 
 const openModal = function () {
   modal.classList.remove('hidden');
@@ -71,13 +75,9 @@ navLinks.addEventListener('click', function (e) {
 
 ////////////////////////////////////////////////////////
 // TABBED component
-const tabs = document.querySelectorAll('.operations__tab');
-const tabsContainer = document.querySelector('.operations__tab-container');
-const tabsContent = document.querySelectorAll('.operations__content');
-
 tabsContainer.addEventListener('click', function (e) {
   const clicked = e.target.closest('.operations__tab');
-  console.log(clicked);
+  // console.log(clicked);
 
   // Guard Clause
   if (!clicked) return;
@@ -92,6 +92,59 @@ tabsContainer.addEventListener('click', function (e) {
     .querySelector(`.operations__content--${clicked.dataset.tab}`)
     .classList.add('operations__content--active');
 });
+
+// Menu fade animation
+const handlerHover = function (e) {
+  // console.log(this, e.currentTarget); //NOTE: Here, this = event.currentTarget; but 'this' also can be the value we manually passing in /// Review: Event listener_ : this = DOM element that the handler is attched to
+
+  if (e.target.classList.contains('nav__link')) {
+    const link = e.target;
+    const siblings = link.closest('.nav').querySelectorAll('.nav__link');
+    const logo = link.closest('.nav').querySelector('img');
+
+    // change siblings opacity
+    siblings.forEach(el => {
+      if (el !== link) {
+        el.style.opacity = this;
+      }
+    });
+    // change logo opacity
+    logo.style.opacity = this;
+  }
+};
+
+// Passing 'argument' into handler
+nav.addEventListener('mouseover', handlerHover.bind(0.5));
+nav.addEventListener('mouseout', handlerHover.bind(1));
+
+// nav.addEventListener('mouseover', function (e) {
+//   handlerHover(e, 0.5);
+// });
+// nav.addEventListener('mouseout', function (e) {
+//   handlerHover(e, 1);
+// });
+
+//**12 IMPLEMENTING A STICKY NAVIGATION: THE SCROLL EVENT */
+//// Sticky navigation
+// const section1Coordinate = section1.getBoundingClientRect();
+
+// //TODO: In modern JS, the scroll is out-of-dated
+// window.addEventListener('scroll', function (e) {
+//   if (window.screenY > section1Coordinate.top) {
+//     nav.classList.add('sticky');
+//   } else nav.classList.remove('sticky');
+// });
+//**13 A BETTER WAY: THE INTERSECTION OBSERVER API */
+const obsCallback = function (entries, observer) {
+  entries.forEach(entry => {
+    console.log(entry);
+  });
+};
+
+const obsOptions = {};
+
+const observer = new IntersectionObserver(obsCallback, obsOptions);
+observer.observe(section1);
 
 ////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
@@ -224,7 +277,7 @@ tabsContainer.addEventListener('click', function (e) {
 //   // );
 
 //   // Scrolling, But only relatively cooridinate
-//   // Ó¦¸ÃÒ³ÃæÀ­»Ø¶¥ÉÏ£¬ÔÙÍùÏÂ»¬y
+//   // Ó¦ï¿½ï¿½Ò³ï¿½ï¿½ï¿½ï¿½ï¿½Ø¶ï¿½ï¿½Ï£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â»ï¿½y
 //   // window.scrollTo(s1ccords.left, s1ccords.top);
 
 //   // window.scrollTo({
@@ -360,4 +413,4 @@ tabsContainer.addEventListener('click', function (e) {
 
 //**10 Building a tabbed component */
 
-//**11 PASSING AREGUMENTS TO EVENT HANDLERS */
+//**11 PASSING AREGUMENTS TO EVENT HANDLERS >>>  Menu fade animation*/
