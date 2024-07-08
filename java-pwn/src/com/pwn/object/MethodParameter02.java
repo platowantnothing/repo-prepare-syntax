@@ -7,7 +7,51 @@ package com.pwn.object;
 public class MethodParameter02 {
     //编写一个main方法
     public static void main(String[] args) {
+        //test
+        BB b = new BB();
+        int[] arr = {1, 2, 3};
+        b.test100(arr);
+        System.out.println("For main ...");
 
+        //iterate
+        for (int i = 0; i < arr.length; i++) {
+            System.out.print(arr[i] + "\t");
+        }
+        System.out.println();
+
+        //test person
+        PersonBB personBB = new PersonBB();
+        personBB.name = "Lee";
+        personBB.age = 23;
+
+        b.testPerson(personBB);
+
+        System.out.println("main:" + personBB.name + " " + personBB.age);
+
+
+    }
+}
+
+class PersonBB {
+    String name;
+    int age;
+}
+
+class BB {
+
+    public void testPerson(PersonBB personBB) {
+        personBB.name = "xiao Qiang";
+        System.out.println("test:" + personBB.name + " " + personBB.age);
+    }
+
+    public void test100(int[] arr) {
+        arr[0] = 200;
+        //iterate
+        System.out.println("For test100 ...");
+        for (int i = 0; i < arr.length; i++) {
+            System.out.print(arr[i] + "\t");
+        }
+        System.out.println();
     }
 }
 

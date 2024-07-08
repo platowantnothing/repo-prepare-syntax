@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/java-pwn/java-pwn.iml" filepath="$PROJECT_DIR$/java-pwn/java-pwn.iml" />
       <module fileurl="file://$PROJECT_DIR$/javascript-pwn.iml" filepath="$PROJECT_DIR$/javascript-pwn.iml" />
-      <module fileurl="file://$PROJECT_DIR$/repo-prepare-syntax.iml" filepath="$PROJECT_DIR$/repo-prepare-syntax.iml" />
     </modules>
   </component>
 </project>
