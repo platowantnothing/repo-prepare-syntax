@@ -25,4 +25,5 @@
 > Extend content and refer: ![](./07-methodparameter.png) new Person() in method test200, will be handle by GC
 Practice: MethodExercise02.java
 
-### 方法递归调用
+### 方法递归调用 (recursion)
+
